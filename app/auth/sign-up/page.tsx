@@ -1,9 +1,9 @@
 "use client";
-import usePublicRedirection from "@/hooks/usePublicRedirection";
+import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 
 export default function SignUpPage({}: Readonly<{
   children: React.ReactNode;
 }>) {
-  usePublicRedirection();
+  useAuthBasedRedirection(true);
   return <main>Sign up page</main>;
 }

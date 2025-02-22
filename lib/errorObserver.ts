@@ -1,4 +1,4 @@
-type ErrorListener = (error: string | null) => void;
+type ErrorListener = (error: unknown) => void;
 
 class ErrorStore {
   private listeners: ErrorListener[] = [];
@@ -11,6 +11,7 @@ class ErrorStore {
   }
 
   setError(error: string | null) {
+    console.error("API Error", error);
     this.listeners.forEach((listener) => listener(error));
   }
 }

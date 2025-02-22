@@ -1,5 +1,15 @@
+import { useState } from "react";
+
 // Custom hook to use the context
 export function useAppInit() {
-  console.log("will call all the init apis here");
-  return true;
+  const hasToken = !!localStorage.getItem("token");
+  const [initApisLoading, setInitApisLoading] = useState(hasToken);
+
+  //   useEffect(() => {
+  //     if (hasToken) {
+  //       setInitApisLoading(true);
+  //     }
+  //   }, [hasToken]);
+
+  return initApisLoading;
 }

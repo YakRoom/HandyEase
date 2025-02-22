@@ -1,5 +1,5 @@
 "use client";
-
+import { errorStore } from "@/lib/errorObserver";
 import Axios, { AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
@@ -9,6 +9,20 @@ export const AXIOS_INSTANCE = Axios.create({
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
+
+AXIOS_INSTANCE.interceptors.response.use(
+  (response) => response, // Return successful responses
+  (error) => {
+    console.error("API Request Failed:", error);
+
+    // Capture error details in errorStore
+    if (errorStore?.setError) {
+      errorStore.setError(error);
+    }
+
+    return Promise.reject(error); // Ensure the error is still thrown
+  }
+);
 
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
   const source = Axios.CancelToken.source();
