@@ -8,6 +8,7 @@ import thumbnail from "@/public/images/thumbnail.png";
 import User from "@/public/images/user.jpeg";
 import Service from "@/public/images/service.svg";
 import WorkerDescriptionCard from "../WorkerDescriptionCard";
+import Footer from "../Footer";
 
 const Home: FC = () => {
   const [pincode, setPincode] = useState("");
@@ -93,6 +94,7 @@ const Home: FC = () => {
       })}
       </div>
       </div>
+      <Footer />
     </>
   );
 };
