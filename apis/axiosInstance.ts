@@ -3,12 +3,24 @@ import { errorStore } from "@/lib/errorObserver";
 import Axios, { AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://api.yakroom.com",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    // Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
+
+// ✅ Add an interceptor to dynamically set the Authorization header
+AXIOS_INSTANCE.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token"); // 🔥 Get the latest token
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 AXIOS_INSTANCE.interceptors.response.use(
   (response) => response, // Return successful responses

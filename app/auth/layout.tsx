@@ -1,3 +1,4 @@
+import GreyPaper from "@/components/ui/grey-paper";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,5 +11,5 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main>{children}</main>;
+  return <GreyPaper> {children}</GreyPaper>;
 }

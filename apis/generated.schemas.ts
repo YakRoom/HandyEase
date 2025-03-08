@@ -47,8 +47,6 @@ export interface CreateUserDto {
 }
 
 export interface VerifyOtpDto {
-  /** Email of the user */
-  email: string;
   /**
    * One-time password code
    * @minLength 6
@@ -66,6 +64,8 @@ export interface CreateProviderDto {
   serviceTypes: CreateProviderDtoServiceTypesItem[];
   /** Years of experience in the field */
   experienceYears: number;
+  /** Radius of location */
+  radius: number;
   /** Phone number of the provider */
   phoneNumber: string;
   /** Whether to show the phone number */
@@ -78,10 +78,10 @@ export interface CreateProviderDto {
   hourlyRate: number;
   /** Provider's biographical information */
   bio?: string;
-  /** Longitude of the provider */
-  longitude: number;
-  /** Latitude of the provider */
-  latitude: number;
+  /** Location ID */
+  locationId?: string;
+  /** The URL of the provider's resume */
+  resume: string;
 }
 
 export type UpdateProviderDtoServiceTypesItem = { [key: string]: unknown };
@@ -93,6 +93,8 @@ export interface UpdateProviderDto {
   serviceTypes?: UpdateProviderDtoServiceTypesItem[];
   /** Years of experience in the field */
   experienceYears?: number;
+  /** Radius of location */
+  radius?: number;
   /** Phone number of the provider */
   phoneNumber?: string;
   /** Whether to show the phone number */
@@ -105,10 +107,10 @@ export interface UpdateProviderDto {
   hourlyRate?: number;
   /** Provider's biographical information */
   bio?: string;
-  /** Longitude of the provider */
-  longitude?: number;
-  /** Latitude of the provider */
-  latitude?: number;
+  /** Location ID */
+  locationId?: string;
+  /** The URL of the provider's resume */
+  resume?: string;
 }
 
 /**
@@ -137,13 +139,17 @@ export interface SearchProvidersDto {
   pageSize?: number;
   /** Field to sort by */
   sortBy?: SearchProvidersDtoSortBy;
-  /** Longitude */
-  longitude?: number;
-  /** Latitude */
-  latitude?: number;
+  /** Location ID */
+  locationId?: string;
   /** Service types */
   serviceTypes?: string[];
 }
 
 export interface ChangeProviderStatusDto { [key: string]: unknown }
+
+export interface SuggestionDto { [key: string]: unknown }
+
+export type ProvidersControllerGetMyProviderDetailsParams = {
+userId: string;
+};
 

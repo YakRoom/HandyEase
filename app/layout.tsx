@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryWrapper from "@/components/wrappers/QueryWrapper";
 import { AppProvider } from "@/context/AppContext";
 import { ErrorBoundary } from "@/components/wrappers/ErrorBoundary";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <QueryWrapper>
             <AppProvider>{children}</AppProvider>
+            <Footer />
           </QueryWrapper>
         </ErrorBoundary>
       </body>

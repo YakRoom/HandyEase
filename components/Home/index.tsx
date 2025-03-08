@@ -1,17 +1,25 @@
 "use client";
-import { FC, memo, useCallback, useState } from "react";
+import { FC, memo, useCallback, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import SelectorCard from "../SelectorCard";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import thumbnail from "@/public/images/thumbnail.png";
 import User from "@/public/images/user.jpeg";
-import Service from "@/public/images/service.svg";
 import WorkerDescriptionCard from "../WorkerDescriptionCard";
-import Footer from "../Footer";
-
+import {
+  useProvidersControllerGetAllProviders,
+  useProvidersControllerSearchProviders,
+} from "@/apis/generated";
 const Home: FC = () => {
+  const { mutate, data } = useProvidersControllerSearchProviders();
+  console.log(data);
   const [pincode, setPincode] = useState("");
+  useEffect(() => {
+    mutate({
+      data: { locationId: "ChIJpSjxAwbXCDkRhHl5x_m4mzU" },
+    });
+  }, []);
 
   const onSearchClick = useCallback(() => {
     console.log("search clicked");
@@ -43,7 +51,6 @@ const Home: FC = () => {
   ];
 
   return (
-    <>
     <div className="m-4 rounded-lg bg-gray-50">
       <span className="text-4xl font-bold ma">Get it done with Handymate</span>
       <div className="text-xl text-gray-600 mt-4">
@@ -64,38 +71,20 @@ const Home: FC = () => {
         </Button>
         <Image src={thumbnail} alt="thumbnail" height={"500"} />
         <div>
-        <div className="text-2xl font-bold">Explore Nearby</div>
-        {sampleUsers.map((user, index) => {
-          return <WorkerDescriptionCard key={index} {...user} />;
-        })}
-        <Button className="w-full bg-white text-black" onClick={onSearchClick}>
-          View all
-        </Button>
+          <div className="text-2xl font-bold">Explore Nearby</div>
+          {sampleUsers.map((user, index) => {
+            return <WorkerDescriptionCard key={index} {...user} />;
+          })}
+          <Button
+            className="w-full bg-white text-black"
+            onClick={onSearchClick}
+          >
+            View all
+          </Button>
         </div>
       </div>
-      <div>
+      <div></div>
     </div>
-
-    </div>
-    <div className="m-6">
-    <div className="text-2xl font-bold">Services</div>
-    <div className="mt-4">
-      {["Plumbing", "Electrician", "Carpenter", "Painter"].map((service, index) => {
-        return (
-          <div className="flex flex-row p-3 mb-4 bg-gray-50 rounded-2xl gap-4" key={index}>
-            <div>
-            <span className="font-bold">{service}</span>
-            <div>Deep Clean, Move ot cleaning, Window Cleaning </div>
-            <Button className="bg-white text-black mt-4 font-bold" size='lg'>Details</Button>
-            </div>
-            <Image src={Service} alt="thumbnail" height={"100"} width={"100"} />
-          </div>
-        );
-      })}
-      </div>
-      </div>
-      <Footer />
-    </>
   );
 };
 

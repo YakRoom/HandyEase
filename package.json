@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate-api": "npx @openapitools/openapi-generator-cli generate -i ./swagger.json -g typescript-react-query -o ./src/api"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",

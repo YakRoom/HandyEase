@@ -1,7 +1,13 @@
 "use client";
 import { useAppInit } from "@/hooks/useAppInit";
 import { useErrorObserver } from "@/hooks/useErrorObserver";
-import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  useEffect,
+} from "react";
 
 // Define types for the state
 interface AppState {
@@ -49,7 +55,7 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   const [state, dispatch] = useReducer(appReducer, initialState);
-  const isInitApisLoading = useAppInit();
+  const isInitApisLoading = useAppInit(state, dispatch);
   useErrorObserver();
 
   return (
