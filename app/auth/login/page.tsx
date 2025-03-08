@@ -2,6 +2,7 @@
 import { useAuthControllerSignIn } from "@/apis/generated";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 import { useEffect } from "react";
+import LoginCredentials from '@/components/Login'
 
 export default function LoginPage({}: Readonly<{
   children: React.ReactNode;
@@ -16,5 +17,5 @@ export default function LoginPage({}: Readonly<{
       },
     });
   }, []);
-  return <main>Login page</main>;
+  return <LoginCredentials />
 }
