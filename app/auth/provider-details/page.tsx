@@ -49,15 +49,18 @@ const ProviderSetup = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { mutate } = useProvidersControllerCreateProvider();
   const { state: appState } = useAppContext();
-  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
-    query: {
-      enabled:
-        appState?.user?.role === CreateUserDtoRole.PROVIDER &&
-        appState?.user?.policyAccepted,
-      refetchOnMount: false,
-    },
-  });
-
+  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails(
+    { userId: "" },
+    {
+      query: {
+        enabled:
+          state?.user?.role === CreateUserDtoRole.PROVIDER &&
+          state?.user?.policyAccepted,
+        refetchOnMount: false,
+      },
+    }
+  );
+  const isEditMode = Object.values(providerDetails || {}).length;
   const { mutate: mutateEdit, data: updatedDetails } =
     useProvidersControllerUpdateMyDetails();
 
@@ -80,8 +83,6 @@ const ProviderSetup = () => {
       router.replace("/");
     }
   }, [appState?.user]);
-
-  const isEditMode = Object.values(providerDetails || {}).length;
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
