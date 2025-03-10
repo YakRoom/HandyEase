@@ -5,11 +5,12 @@ import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
+import { ArrowRight } from "lucide-react";
 
-const NameStep: FC = () => {
+const NameStep: FC<{ setStep: any }> = ({ setStep }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  useAuthBasedRedirection();
+  //   useAuthBasedRedirection();
   const { mutate, data } = useUsersControllerUpdateUserInfo();
   const { dispatch } = useAppContext();
   const router = useRouter();
@@ -39,19 +40,29 @@ const NameStep: FC = () => {
           value={lastName}
           onChange={(e) => setLastName(e?.target?.value)}
         />
-        <Button
-          disabled={!firstName}
-          onClick={() => {
-            mutate({
-              data: {
-                firstName,
-                lastName,
-              },
-            });
-          }}
-        >
-          Submit
-        </Button>
+        <div className="flex flex-col items-end mt-16">
+          <Button
+            disabled={!firstName}
+            onClick={() => {
+              mutate({
+                data: {
+                  firstName,
+                  lastName,
+                },
+              });
+              setStep((prev: number) => prev + 1);
+            }}
+            variant={!firstName ? "outline" : "default"}
+            className={
+              !firstName
+                ? "w-20 bg-gray-50 font-bold rounded-3xl text-xs"
+                : "w-20 font-bold rounded-3xl text-xs"
+            }
+          >
+            Next
+            <ArrowRight />
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -11,14 +11,15 @@ import { useAppContext } from "@/context/AppContext";
 import { useAuthControllerVerifyOtp } from "@/apis/generated";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
-const OtpStep: FC = () => {
+const OtpStep: FC<{ setStep: any }> = ({ setStep }) => {
   const { state } = useAppContext();
   const [otp, setOtp] = useState<number>();
   const { mutate, data } = useAuthControllerVerifyOtp();
   const router = useRouter();
   const { dispatch } = useAppContext();
-  useAuthBasedRedirection();
+  // useAuthBasedRedirection();
   useEffect(() => {
     if (data?.user) {
       dispatch({
@@ -44,16 +45,25 @@ const OtpStep: FC = () => {
           </InputOTPGroup>
         </InputOTP>
         <Button
+          onClick={() => console.log("resend")}
+          variant="outline"
+          className="w-16 bg-gray-50 font-bold rounded-3xl text-xs"
+        >
+          Resend
+        </Button>
+        <div className="flex flex-col items-end mt-16">
+        <Button
           disabled={!otp || otp < 999}
           onClick={() => {
             mutate({ data: { otp } });
+            setStep((prev: number) => prev+1);
           }}
+          variant="outline"
+          className="w-20 bg-gray-50 font-bold rounded-3xl text-xs"
         >
-          Submit
+          Next
+          <ArrowRight />
         </Button>
-        <div className="text-sm mt-16">
-          Get the job done with low prices connect directly with 100s of crew
-          member in your local area
         </div>
       </div>
     </div>

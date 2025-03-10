@@ -5,7 +5,7 @@ import { TOKEN_KEY } from "@/app/auth/login/page";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 
-const EmailStep: FC = ({ userType }) => {
+const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { dispatch } = useAppContext();
@@ -36,7 +36,7 @@ const EmailStep: FC = ({ userType }) => {
         />
         <Input
           placeholder="Password"
-          type="email"
+          type="password"
           className="bg-stone-200 h-11"
           value={password}
           onChange={(e) => setPassword(e?.target?.value)}
@@ -50,6 +50,7 @@ const EmailStep: FC = ({ userType }) => {
                 role: userType,
               },
             });
+            setStep((prev: number) => prev + 1);
           }}
           disabled={!email || !password}
         >

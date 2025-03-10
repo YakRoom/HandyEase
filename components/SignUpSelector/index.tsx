@@ -2,7 +2,7 @@ import { FC } from "react";
 import { ArrowRight } from "lucide-react";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 
-const SignUpSelector: FC = ({ setUserType }) => {
+const SignUpSelector: FC<{ setUserType: any }> = ({ setUserType }) => {
   return (
     <div className="bg-gray-50 m-4 rounded-xl flex flex-col gap-8 px-8">
       <div

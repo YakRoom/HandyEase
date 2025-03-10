@@ -127,7 +127,7 @@ const ProviderSetup = () => {
         ].map((skill) => (
           <span
             key={skill}
-            className="bg-gray-200 text-gray-700 px-3 py-1 text-xs rounded-full cursor-pointer"
+            className="bg-gray-50 text-gray-700 px-3 py-1 text-xs rounded-full cursor-pointer"
             onClick={() => dispatch({ type: "ADD_SKILL", skill })}
           >
             {skill}
