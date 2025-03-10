@@ -9,15 +9,14 @@ import { useState } from 'react';
 export default function Credentials({}: Readonly<{
   children: React.ReactNode;
 }>) {
-    const [step, setStep] = useState(3)
+    const [step, setStep] = useState(0)
   return (
     <>
     <AuthHeader isLogin={false} />
     {step === 0 && <EmailStep userType={''} setStep={setStep}/>}
     {step === 1 && <OtpStep setStep={setStep}/>}
     {step === 2 && <Name setStep={setStep}/> }
-    {step === 3 && <Name setStep={setStep}/> }
-    {step === 4 && <Terms setStep={setStep} />}
+    {step === 3 && <Terms setStep={setStep} />}
     </>
   );
 }
