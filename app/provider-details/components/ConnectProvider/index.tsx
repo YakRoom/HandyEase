@@ -1,3 +1,4 @@
+import Header from "@/components/AuthHeader";
 import WhitePaper from "@/components/ui/white-paper";
 import React from "react";
 
@@ -5,6 +6,7 @@ const ConnectSection = () => {
   return (
     <WhitePaper>
       {/* Heading */}
+
       <h3 className="text-lg font-semibold text-gray-800">Connect</h3>
       <textarea
         className="w-full border border-gray-300 rounded-lg p-3 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"

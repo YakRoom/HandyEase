@@ -1,7 +1,7 @@
 "use client";
 import { useAuthControllerSignIn } from "@/apis/generated";
 // import { useAuthControllerSignIn } from "@/apis/generated";
-import AuthHeader from "@/components/AuthHeader";
+import Header from "@/components/AuthHeader";
 import { Button, Input } from "@/components/ui";
 import WhitePaper from "@/components/ui/white-paper";
 import { useAppContext } from "@/context/AppContext";
@@ -32,7 +32,6 @@ export default function LoginPage({}: Readonly<{
 
   return (
     <div>
-      <AuthHeader isLogin />
       <WhitePaper>
         {/* Header with tabs */}
 

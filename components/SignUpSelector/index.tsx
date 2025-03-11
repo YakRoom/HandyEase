@@ -1,10 +1,11 @@
 import { FC } from "react";
 import { ArrowRight } from "lucide-react";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
+import WhitePaper from "../ui/white-paper";
 
 const SignUpSelector: FC = ({ setUserType }) => {
   return (
-    <div className="bg-gray-50 m-4 rounded-xl flex flex-col gap-8 px-8">
+    <WhitePaper>
       <div
         className="flex flex-row p-4 gap-4"
         onClick={() => setUserType(CreateUserDtoRole.CONSUMER)}
@@ -36,7 +37,7 @@ const SignUpSelector: FC = ({ setUserType }) => {
         </div>
         <ArrowRight size={64} className="h-full self-center" />
       </div>
-    </div>
+    </WhitePaper>
   );
 };
 

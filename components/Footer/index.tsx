@@ -34,15 +34,15 @@ const Footer: FC = () => {
             (service, index) => {
               return (
                 <div
-                  className="flex flex-row p-3 mb-4 bg-gray-50 rounded-2xl gap-4"
+                  className="flex flex-row p-6 mb-4 bg-gray-50 rounded-2xl gap-4 "
                   key={index}
                 >
-                  <div>
+                  <div className="flex flex-col gap-4">
                     <span className="font-bold">{service}</span>
                     <div>Deep Clean, Move ot cleaning, Window Cleaning </div>
                     <Button
-                      className="bg-white text-black mt-4 font-bold"
-                      size="lg"
+                      className="bg-white text-black font-bold w-max rounded-lg"
+                      // size="lg"
                     >
                       Details
                     </Button>

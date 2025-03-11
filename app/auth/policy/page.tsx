@@ -22,9 +22,6 @@ export default function Policy({}: Readonly<{
         type: "SET_USER",
         payload: data,
       });
-      if (state?.user?.role === CreateUserDtoRole.PROVIDER) {
-        router.replace("/auth/provider-details");
-      }
     }
   }, [data]);
 

@@ -1,5 +1,5 @@
 "use client";
-import AuthHeader from "@/components/AuthHeader";
+import Header from "@/components/AuthHeader";
 import SignUpSelector from "@/components/SignUpSelector";
 import EmailStep from "@/components/SignUp/Email";
 import NameStep from "@/components/SignUp/Name";
@@ -19,7 +19,6 @@ export default function SignUpPage({}: Readonly<{
 
   return (
     <>
-      <AuthHeader isLogin={false} />
       {!userType && (
         <SignUpSelector
           setUserType={(type) => {
