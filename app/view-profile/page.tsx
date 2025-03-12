@@ -10,10 +10,13 @@ import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 
 const ViewProfile = () => {
+  useAuthBasedRedirection();
   const { state } = useAppContext();
-  //   useAuthBasedRedirection();
-  const { data: providerDetails } =
-    useProvidersControllerGetMyProviderDetails();
+  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
+    query: {
+      enabled: state?.user?.role === CreateUserDtoRole.PROVIDER,
+    },
+  });
 
   if (!providerDetails && state?.user?.role === CreateUserDtoRole.PROVIDER) {
     return <div>Loading...</div>;
@@ -25,12 +28,11 @@ const ViewProfile = () => {
 
   return (
     <GreyPaper>
-      {state?.user?.role === CreateUserDtoRole.CONSUMER ? (
-        <ConsumerProfile />
-      ) : (
+      {state?.user?.role === CreateUserDtoRole.CONSUMER && <ConsumerProfile />}
+      {state?.user?.role === CreateUserDtoRole.PROVIDER && (
         <Profile editProfile provider={providerDetails} />
       )}
-      <Reviews reviews={reviews} />
+      {state?.user && <Reviews reviews={reviews} />}
     </GreyPaper>
   );
 };

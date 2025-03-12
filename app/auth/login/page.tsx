@@ -19,9 +19,9 @@ export default function LoginPage({}: Readonly<{
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
 
-  const { mutate: signIn, data,isPending } = useAuthControllerSignIn();
+  const { mutate: signIn, data, isPending } = useAuthControllerSignIn();
   const { dispatch } = useAppContext();
-console.log(data);
+  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -37,22 +37,23 @@ console.log(data);
     let isValid = true;
     let newErrors = { email: "", password: "" };
 
-    const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      newErrors.email = "Invalid email format";
-      isValid = false;
-    }
+    // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(email)) {
+    //   newErrors.email = "Invalid email format";
+    //   isValid = false;
+    // }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-      newErrors.password = "Password must be 8+ chars, include uppercase, number & special char";
+      newErrors.password =
+        "Password must be 8+ chars, include uppercase, number & special char";
       isValid = false;
     }
 
     setErrors(newErrors);
     return isValid;
   };
-
 
   const handleSubmit = () => {
     if (validateForm()) {
@@ -64,8 +65,7 @@ console.log(data);
       });
     }
   };
-  console.log("login",data);
-  
+
   return (
     <div>
       <WhitePaper>
@@ -74,11 +74,18 @@ console.log(data);
         {/* Form */}
         <div className="space-y-4 w-[100%] min-w-[300px]  h-[547px] flex flex-col gap-3">
           <div className="w-[265px] h-[60px] p-1">
-          <h1 style={{fontSize:"28px",fontWeight:"500",lineHeight:"100%",letterSpacing:"0"}}>
-  What's your phone number or email
-</h1>
+            <h1
+              style={{
+                fontSize: "28px",
+                fontWeight: "500",
+                lineHeight: "100%",
+                letterSpacing: "0",
+              }}
+            >
+              What's your phone number or email
+            </h1>
           </div>
-     
+
           {/* <Input
             placeholder="Email"
             type="email"
@@ -88,31 +95,34 @@ console.log(data);
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>} */}
           <div>
-          <Input
-            placeholder="Email"
-            type="email"
-            className="bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
-            value={email}
+            <Input
+              placeholder="Email"
+              type="email"
+              className="bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
+              value={email}
               onChange={(e) => {
-                setEmail(e?.target?.value)
-                setErrors((prev)=>({...prev ,email:""}))
-            } }
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email}</p>}
-         
+                setEmail(e?.target?.value);
+                setErrors((prev) => ({ ...prev, email: "" }));
+              }}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+            )}
           </div>
           <div>
-          <Input
-            value={password}
-            type="password"
-            placeholder="Password"
-            className=" bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
+            <Input
+              value={password}
+              type="password"
+              placeholder="Password"
+              className=" bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
               onChange={(e) => {
-                setPassword(e?.target?.value)
-                setErrors((prev)=>({...prev ,password:""}))
-            } }
-          />
-           {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password}</p>}
+                setPassword(e?.target?.value);
+                setErrors((prev) => ({ ...prev, password: "" }));
+              }}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+            )}
           </div>
           {/* <Input
             value={password}

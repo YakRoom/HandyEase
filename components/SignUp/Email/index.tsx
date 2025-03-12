@@ -10,12 +10,11 @@ const EmailStep: FC = ({ userType }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
 
-
   const { dispatch } = useAppContext();
 
-  const { mutate, data,isPending } = useAuthControllerSignUp();
-//  console.log("data",data);
- 
+  const { mutate, data, isPending } = useAuthControllerSignUp();
+  //  console.log("data",data);
+
   useEffect(() => {
     if (data?.access_token) {
       localStorage.setItem(TOKEN_KEY, data?.access_token);
@@ -26,20 +25,21 @@ const EmailStep: FC = ({ userType }) => {
     }
   }, [data]);
 
-
   const validateForm = () => {
     let isValid = true;
     let newErrors = { email: "", password: "" };
 
-    const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      newErrors.email = "Invalid email format";
-      isValid = false;
-    }
+    // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(email)) {
+    //   newErrors.email = "Invalid email format";
+    //   isValid = false;
+    // }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-      newErrors.password = "Password must be 8+ chars, include uppercase, number & special char";
+      newErrors.password =
+        "Password must be 8+ chars, include uppercase, number & special char";
       isValid = false;
     }
 
@@ -59,26 +59,28 @@ const EmailStep: FC = ({ userType }) => {
     }
   };
 
- 
-  
   return (
     <WhitePaper>
       <div className="flex flex-col gap-4">
         <div className="text-2xl font-bold">What's your email?</div>
-       
+
         <div>
-        <Input
-          placeholder="Email"
-          type="email"
-          className="bg-stone-200 h-11"
-          value={email}
+          <Input
+            placeholder="Email"
+            type="email"
+            className="bg-stone-200 h-11"
+            value={email}
             onChange={(e) => {
-              setEmail(e?.target?.value)
-              setErrors((prev) => ({...prev, email: "" }));
-          } }
+              setEmail(e?.target?.value);
+              setErrors((prev) => ({ ...prev, email: "" }));
+            }}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email}</p>}
-          {data && data.code == "EMAIL_EXISTS" && <p className="text-red-500 text-sm mt-2">{data.message}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+          )}
+          {data && data.code == "EMAIL_EXISTS" && (
+            <p className="text-red-500 text-sm mt-2">{data.message}</p>
+          )}
         </div>
         {/* <Input
           placeholder="Email"
@@ -88,19 +90,20 @@ const EmailStep: FC = ({ userType }) => {
           onChange={(e) => setEmail(e?.target?.value)}
         /> */}
         <div>
-    
-        <Input
-          placeholder="Password"
-          type="password"
-          className="bg-stone-200 h-11"
-          value={password}
+          <Input
+            placeholder="Password"
+            type="password"
+            className="bg-stone-200 h-11"
+            value={password}
             onChange={(e) => {
-              setPassword(e?.target?.value)
-              setErrors((prev) => ({...prev, password: "" }));
-          } }
-        />
+              setPassword(e?.target?.value);
+              setErrors((prev) => ({ ...prev, password: "" }));
+            }}
+          />
 
-        {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+          )}
         </div>
         {/* <Input
           placeholder="Password"
@@ -123,8 +126,7 @@ const EmailStep: FC = ({ userType }) => {
           disabled={!email || !password}
           isLoading={isPending}
         >
-  
-             Submit
+          Submit
         </Button>
 
         <div className="text-sm mt-16">

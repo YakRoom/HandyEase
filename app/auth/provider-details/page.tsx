@@ -60,7 +60,6 @@ export const CLEANER = [{ label: "Cleaner", key: "CLEANER" }];
 export const OTHERS = [{ label: "Baby Sitter", key: "BABY_SITTER" }];
 
 const AVAILABLE_SKILL = { HANDYMEN, CLEANER, OTHERS };
-const AVAILABLE_SKILLS = [];
 
 const initialState: ProviderState = {
   profilePic: "",
@@ -73,7 +72,7 @@ const initialState: ProviderState = {
   about: "",
   skills: [],
   locationName: "",
-  locationId: "ChIJpSjxAwbXCDkRhHl5x_m4mzU",
+  locationId: "",
 };
 
 function reducer(state: ProviderState, action: ProviderAction): ProviderState {
@@ -126,8 +125,9 @@ const ProviderSetup = () => {
       refetchOnMount: true,
     },
   });
+
   useEffect(() => {
-    if (providerDetails) {
+    if (Object.values(providerDetails || {}).length > 0) {
       const availableBuckets = Object.values(AVAILABLE_SKILL).reduce(
         (acc, bucket) => {
           if (
@@ -154,8 +154,7 @@ const ProviderSetup = () => {
           allowCalls: providerDetails.showPhoneNumber || false,
           skills: providerDetails.serviceTypes || [],
           locationName: providerDetails.locationName || "",
-          locationId:
-            providerDetails.locationId || "ChIJpSjxAwbXCDkRhHl5x_m4mzU",
+          locationId: providerDetails.locationId || "",
         },
       });
     }
@@ -163,16 +162,16 @@ const ProviderSetup = () => {
 
   const isEditMode = Object.values(providerDetails || {}).length > 0;
   const { mutate: mutateEdit } = useProvidersControllerUpdateMyDetails();
-  const { mutate: mutateSuggestions, data: locationData } =
-    useProvidersControllerGetSuggestions();
+  // const { mutate: mutateSuggestions, data: locationData } =
+  //   useProvidersControllerGetSuggestions();
   useAuthBasedRedirection();
   const router = useRouter();
 
-  useEffect(() => {
-    if (state.locationName.trim()) {
-      mutateSuggestions({ data: { place: state.locationName } });
-    }
-  }, [state.locationName, mutateSuggestions]);
+  // useEffect(() => {
+  //   if (state.locationName.trim()) {
+  //     mutateSuggestions({ data: { place: state.locationName } });
+  //   }
+  // }, [state.locationName, mutateSuggestions]);
 
   useEffect(() => {
     if (appState?.user?.role === CreateUserDtoRole.CONSUMER) {

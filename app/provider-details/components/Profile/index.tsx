@@ -5,7 +5,7 @@ import React from "react";
 
 const Profile = ({ provider, editProfile }) => {
   const router = useRouter();
-  const reviews = provider.user.reviewsReceived || [];
+  const reviews = provider?.user?.reviewsReceived || [];
 
   const avgRating =
     reviews.length > 0
