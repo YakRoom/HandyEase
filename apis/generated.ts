@@ -27,7 +27,7 @@ import type {
   CreateProviderDto,
   CreateUserDto,
   LoginAuthDto,
-  ProvidersControllerGetMyProviderDetailsParams,
+  ProvidersControllerGetProviderDetailsParams,
   SearchProvidersDto,
   SuggestionDto,
   UpdateProviderDto,
@@ -415,34 +415,33 @@ const {mutation: mutationOptions} = options ?
     }
     
 export const providersControllerGetMyProviderDetails = (
-    params: ProvidersControllerGetMyProviderDetailsParams,
+    
  signal?: AbortSignal
 ) => {
       
       
       return customInstance<void>(
-      {url: `/providers/provider-info`, method: 'GET',
-        params, signal
+      {url: `/providers/provider-info`, method: 'GET', signal
     },
       );
     }
   
 
-export const getProvidersControllerGetMyProviderDetailsQueryKey = (params: ProvidersControllerGetMyProviderDetailsParams,) => {
-    return [`/providers/provider-info`, ...(params ? [params]: [])] as const;
+export const getProvidersControllerGetMyProviderDetailsQueryKey = () => {
+    return [`/providers/provider-info`] as const;
     }
 
     
-export const getProvidersControllerGetMyProviderDetailsQueryOptions = <TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>(params: ProvidersControllerGetMyProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
+export const getProvidersControllerGetMyProviderDetailsQueryOptions = <TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getProvidersControllerGetMyProviderDetailsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getProvidersControllerGetMyProviderDetailsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>> = ({ signal }) => providersControllerGetMyProviderDetails(params, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>> = ({ signal }) => providersControllerGetMyProviderDetails(signal);
 
       
 
@@ -456,7 +455,7 @@ export type ProvidersControllerGetMyProviderDetailsQueryError = unknown
 
 
 export function useProvidersControllerGetMyProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>(
- params: ProvidersControllerGetMyProviderDetailsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>> & Pick<
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>,
           TError,
@@ -466,7 +465,7 @@ export function useProvidersControllerGetMyProviderDetails<TData = Awaited<Retur
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProvidersControllerGetMyProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>(
- params: ProvidersControllerGetMyProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>> & Pick<
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>,
           TError,
@@ -476,16 +475,99 @@ export function useProvidersControllerGetMyProviderDetails<TData = Awaited<Retur
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProvidersControllerGetMyProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>(
- params: ProvidersControllerGetMyProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useProvidersControllerGetMyProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError = unknown>(
- params: ProvidersControllerGetMyProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetMyProviderDetails>>, TError, TData>>, }
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getProvidersControllerGetMyProviderDetailsQueryOptions(params,options)
+  const queryOptions = getProvidersControllerGetMyProviderDetailsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const providersControllerGetProviderDetails = (
+    params: ProvidersControllerGetProviderDetailsParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/providers/provider-info-by-id`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getProvidersControllerGetProviderDetailsQueryKey = (params: ProvidersControllerGetProviderDetailsParams,) => {
+    return [`/providers/provider-info-by-id`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getProvidersControllerGetProviderDetailsQueryOptions = <TData = Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError = unknown>(params: ProvidersControllerGetProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getProvidersControllerGetProviderDetailsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>> = ({ signal }) => providersControllerGetProviderDetails(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ProvidersControllerGetProviderDetailsQueryResult = NonNullable<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>>
+export type ProvidersControllerGetProviderDetailsQueryError = unknown
+
+
+export function useProvidersControllerGetProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError = unknown>(
+ params: ProvidersControllerGetProviderDetailsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof providersControllerGetProviderDetails>>,
+          TError,
+          Awaited<ReturnType<typeof providersControllerGetProviderDetails>>
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useProvidersControllerGetProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError = unknown>(
+ params: ProvidersControllerGetProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof providersControllerGetProviderDetails>>,
+          TError,
+          Awaited<ReturnType<typeof providersControllerGetProviderDetails>>
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useProvidersControllerGetProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError = unknown>(
+ params: ProvidersControllerGetProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useProvidersControllerGetProviderDetails<TData = Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError = unknown>(
+ params: ProvidersControllerGetProviderDetailsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetProviderDetails>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getProvidersControllerGetProviderDetailsQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -871,3 +953,85 @@ const {mutation: mutationOptions} = options ?
       return useMutation(mutationOptions);
     }
     
+export const providersControllerGetServiceTypes = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/providers/service-types`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getProvidersControllerGetServiceTypesQueryKey = () => {
+    return [`/providers/service-types`] as const;
+    }
+
+    
+export const getProvidersControllerGetServiceTypesQueryOptions = <TData = Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getProvidersControllerGetServiceTypesQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>> = ({ signal }) => providersControllerGetServiceTypes(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ProvidersControllerGetServiceTypesQueryResult = NonNullable<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>>
+export type ProvidersControllerGetServiceTypesQueryError = unknown
+
+
+export function useProvidersControllerGetServiceTypes<TData = Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof providersControllerGetServiceTypes>>,
+          TError,
+          Awaited<ReturnType<typeof providersControllerGetServiceTypes>>
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useProvidersControllerGetServiceTypes<TData = Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof providersControllerGetServiceTypes>>,
+          TError,
+          Awaited<ReturnType<typeof providersControllerGetServiceTypes>>
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useProvidersControllerGetServiceTypes<TData = Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useProvidersControllerGetServiceTypes<TData = Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof providersControllerGetServiceTypes>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getProvidersControllerGetServiceTypesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+

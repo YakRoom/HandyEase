@@ -26,66 +26,32 @@ const Footer: FC = () => {
     return null;
   }
   return (
-    <>
-      <div className="m-6">
-        <div className="text-2xl font-bold">Services</div>
-        <div className="mt-4">
-          {["Plumbing", "Electrician", "Carpenter", "Painter"].map(
-            (service, index) => {
-              return (
-                <div
-                  className="flex flex-row p-6 mb-4 bg-gray-50 rounded-2xl gap-4 "
-                  key={index}
-                >
-                  <div className="flex flex-col gap-4">
-                    <span className="font-bold">{service}</span>
-                    <div>Deep Clean, Move ot cleaning, Window Cleaning </div>
-                    <Button
-                      className="bg-white text-black font-bold w-max rounded-lg"
-                      // size="lg"
-                    >
-                      Details
-                    </Button>
-                  </div>
-                  <Image
-                    src={Service}
-                    alt="thumbnail"
-                    height={"100"}
-                    width={"100"}
-                  />
-                </div>
-              );
-            }
-          )}
-        </div>
+    <div className="bg-black h-max w-full text-white p-4 flex flex-col gap-4 pt-10">
+      <div className="font-bold">Handymate</div>
+      <Link href={""}>Visit Help Center</Link>
+      <Link href={""}>Learn more about company's mission</Link>
+      <div className="font-bold mt-8">Company</div>
+      <Link href={""}>Our offerings</Link>
+      <Link href={""}>Newsroom</Link>
+      <Link href={""}>Blogs</Link>
+      <Link href={""}>Questions</Link>
+      <div className="font-bold mt-8">Product</div>
+      <Link href={""}>Customer</Link>
+      <Link href={""}>Handyman</Link>
+      <Link href={""}>Cleaner</Link>
+      <Link href={""}>Unicorn</Link>
+      <div className="flex flex-row justify-around my-12">
+        <Image src={Facebook} alt="facebook" height={"32"} width={"32"} />
+        <Image src={Twitter} alt="facebook" height={"32"} width={"32"} />
+        <Image src={Linkedin} alt="facebook" height={"32"} width={"32"} />
       </div>
-      <div className="bg-black h-max w-full text-white p-4 flex flex-col gap-4 pt-10">
-        <div className="font-bold">Handymate</div>
-        <Link href={""}>Visit Help Center</Link>
-        <Link href={""}>Learn more about company's mission</Link>
-        <div className="font-bold mt-8">Company</div>
-        <Link href={""}>Our offerings</Link>
-        <Link href={""}>Newsroom</Link>
-        <Link href={""}>Blogs</Link>
-        <Link href={""}>Questions</Link>
-        <div className="font-bold mt-8">Product</div>
-        <Link href={""}>Customer</Link>
-        <Link href={""}>Handyman</Link>
-        <Link href={""}>Cleaner</Link>
-        <Link href={""}>Unicorn</Link>
-        <div className="flex flex-row justify-around my-12">
-          <Image src={Facebook} alt="facebook" height={"32"} width={"32"} />
-          <Image src={Twitter} alt="facebook" height={"32"} width={"32"} />
-          <Image src={Linkedin} alt="facebook" height={"32"} width={"32"} />
-        </div>
-        <div className="text-gray-400">© 2025 Handyman</div>
-        <div className="flex flex-row gap-4 text-gray-400">
-          <Link href={""}>Privacy</Link>
-          <Link href={""}>Accessibility</Link>
-          <Link href={""}>Terms</Link>
-        </div>
+      <div className="text-gray-400">© 2025 Handyman</div>
+      <div className="flex flex-row gap-4 text-gray-400">
+        <Link href={""}>Privacy</Link>
+        <Link href={""}>Accessibility</Link>
+        <Link href={""}>Terms</Link>
       </div>
-    </>
+    </div>
   );
 };
 

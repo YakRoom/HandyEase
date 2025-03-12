@@ -19,17 +19,15 @@ export function useAppInit(state: any, dispatch: any) {
       refetchOnMount: false,
     },
   });
-  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails(
-    { userId: "" },
-    {
-      query: {
-        enabled:
-          state?.user?.role === CreateUserDtoRole.PROVIDER &&
-          state?.user?.policyAccepted,
-        refetchOnMount: false,
-      },
-    }
-  );
+
+  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
+    query: {
+      enabled:
+        state?.user?.role === CreateUserDtoRole.PROVIDER &&
+        state?.user?.policyAccepted,
+      refetchOnMount: false,
+    },
+  });
   const isDetailsFilled = !!Object.values(providerDetails || {}).length;
 
   useEffect(() => {

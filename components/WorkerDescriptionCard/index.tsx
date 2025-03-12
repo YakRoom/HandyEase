@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Image from "next/image";
 import User from "@/public/images/user.jpeg";
+import { useRouter } from "next/navigation";
 
 interface User {
   firstName: string;
@@ -29,6 +30,7 @@ const WorkerDescriptionCard: FC<WorkerDescriptionCardProps> = (props) => {
   const {
     serviceTypes,
     user,
+    userId,
     bio,
     providerPicture,
     experienceYears,
@@ -39,9 +41,13 @@ const WorkerDescriptionCard: FC<WorkerDescriptionCardProps> = (props) => {
 
   const fullName = `${user.firstName} ${user.lastName}`;
   const role = serviceTypes[0] || "Service Provider";
+  const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-white rounded-lg">
+    <div
+      className="flex flex-col gap-4 p-4 bg-white rounded-lg"
+      onClick={() => router.push("/provider-details/" + userId)}
+    >
       <div className="flex flex-row justify-between gap-[1.5rem]">
         <div className="flex flex-col">
           <span className="text-lg font-bold">{fullName}</span>
