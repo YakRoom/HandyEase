@@ -11,16 +11,18 @@ import GreyPaper from "../ui/grey-paper";
 import SelectorCard from "../SelectorCard";
 import WorkerDescriptionCard from "../WorkerDescriptionCard";
 import thumbnail from "@/public/images/thumbnail.png";
+import SearchProviders from "../SearchProviders";
 
 const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
-  const { mutate: mutateSuggestions, isPending: isSuggestionsLoading } =
-    useProvidersControllerGetSuggestions();
+
   const [address, setAddress] = useState("");
   const [viewAll, setViewAll] = useState(false);
   const [locationId, setLocationId] = useState("ChIJpSjxAwbXCDkRhHl5x_m4mzU");
   const [error, setError] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+
+  const [response, setResponse] = useState([])
 
   useEffect(() => {
     if (locationId) {
@@ -37,42 +39,42 @@ const Home: FC = () => {
     }
   }, [locationId, mutate]);
 
-  const handleSearch = useCallback(async () => {
-    setError("");
-    if (!address) {
-      setError("Please enter an address");
-      return;
-    }
+  // const handleSearch = useCallback(async () => {
+  //   setError("");
+  //   if (!address) {
+  //     setError("Please enter an address");
+  //     return;
+  //   }
 
-    setIsSearching(true);
-    try {
-      await mutateSuggestions({
-        data: { place: address },
-      });
+  //   setIsSearching(true);
+  //   try {
+  //     const apiDataResponse=await mutateSuggestions({
+  //       data: { place: address },
+  //     });
+      
+  //     // setLocationId(response.locationId);
+  //     setViewAll(true);
+  //   } catch (err) {
+  //     setError(
+  //       err instanceof Error
+  //         ? err.message
+  //         : "An error occurred. Please try again."
+  //     );
+  //     // setIsSearching(false);
+  //   }
+  // }, [address, mutateSuggestions]);
 
-      // setLocationId(response.locationId);
-      setViewAll(true);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An error occurred. Please try again."
-      );
-      // setIsSearching(false);
-    }
-  }, [address, mutateSuggestions]);
+  // const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === "Enter") {
+  //     handleSearch();
+  //   }
+  // };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-    setAddress(e?.target?.value);
-  };
-
+  // const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setError("");
+  //   setAddress(e?.target?.value);
+  // };
+ const isSuggestionsLoading=false
   const providers = data?.providers ?? [];
   const providersList = viewAll ? providers : providers.slice(0, 2);
   const totalProviders = providers.length;
@@ -85,19 +87,20 @@ const Home: FC = () => {
       </div>
       <div className="mt-4 flex flex-col gap-6">
         <div>
-          <Input
+          {/* <Input
             placeholder="Start by typing your address"
             type="text"
             className={`bg-stone-200 h-11 ${error ? "border-red-500" : ""}`}
             value={address}
-            onChange={handleAddressChange}
-            onKeyPress={handleKeyPress}
+            // onChange={handleAddressChange}
+            // onKeyPress={handleKeyPress}
             aria-label="Address input"
             aria-invalid={!!error}
             aria-describedby={error ? "address-error" : undefined}
-            disabled={isSearching || isPending || isSuggestionsLoading}
-          />
-          {error && (
+            // disabled={isSearching || isPending || isSuggestionsLoading}
+          /> */}
+      
+          {/* {error && (
             <div
               id="address-error"
               className="text-red-500 text-sm mt-1"
@@ -105,7 +108,7 @@ const Home: FC = () => {
             >
               {error}
             </div>
-          )}
+          )} */}
           {(isSearching || isSuggestionsLoading) && (
             <div
               className="text-gray-600 text-sm mt-1"
@@ -118,11 +121,10 @@ const Home: FC = () => {
             </div>
           )}
         </div>
-        <div>Select the service type</div>
-        <SelectorCard />
-        <Button
+        {/* <SelectorCard /> */}
+        {/* <Button
           className="w-full"
-          onClick={handleSearch}
+          // onClick={handleSearch}
           isLoading={isSearching || isPending || isSuggestionsLoading}
           loadingText={
             isSearching
@@ -134,7 +136,9 @@ const Home: FC = () => {
           aria-label="Search for service providers"
         >
           Search
-        </Button>
+        </Button> */}
+        <SearchProviders />
+        
         {!viewAll && (
           <Image
             src={thumbnail}

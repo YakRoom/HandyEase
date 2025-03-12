@@ -16,10 +16,13 @@ interface AppState {
     name?: string;
   } | null;
   // Add other state properties here
+  searchedLocation?: string;
 }
 
 // Define types for actions
-type AppAction = { type: "SET_USER"; payload: AppState["user"] };
+  type AppAction =
+  | { type: "SET_USER"; payload: AppState["user"] }
+  | { type: "SET_SEARCHED_LOCATION"; payload: string };
 
 // Define the context type
 interface AppContextType {
@@ -30,6 +33,7 @@ interface AppContextType {
 // Initial state
 const initialState: AppState = {
   user: null,
+  searchedLocation: "",
 };
 
 // Create the reducer
@@ -39,6 +43,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         user: action.payload,
+      };
+    case "SET_SEARCHED_LOCATION":
+      return {
+        ...state,
+        searchedLocation: action.payload,
       };
     default:
       return state;

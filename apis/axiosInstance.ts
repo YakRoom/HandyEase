@@ -3,7 +3,7 @@ import { errorStore } from "@/lib/errorObserver";
 import Axios, { AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://api.yakroom.com/",
   headers: {
     "Content-Type": "application/json",
     // Authorization: `Bearer ${localStorage.getItem("token")}`,

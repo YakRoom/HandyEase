@@ -1,0 +1,104 @@
+.search_container {
+  width: 377px;
+  height: 373px;
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  background-color: #e8e8e87d;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.search_input {
+  position: relative;
+}
+.search_input input {
+  width: 345px;
+  height: 44px;
+  border-radius: 8px;
+  background-color: #d9d9d999;
+  border: none;
+  font-size: 16px;
+  letter-spacing: 0;
+  color: #15151580;
+  outline: none;
+  padding-left: 10px;
+}
+
+.select_service {
+  width: 345px;
+  height: 189px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.service_box {
+  width: 164px;
+  height: 161px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-evenly;
+  border-radius: 8px;
+}
+.checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.service_box .description {
+  font-size: 14px;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #151515cc;
+}
+.serviceAndImg {
+  display: flex;
+  justify-content: space-between;
+}
+.serviceAndImg .service_name {
+  font-size: 16px;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+.choose_service {
+  display: flex;
+  width: 345px;
+  height: 161px;
+  gap: 16px;
+}
+
+.select_type_btn {
+  width: 129px;
+  height: 25px;
+  border-radius: 4px;
+  background: #f4f4f4;
+  border: none;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #151515cc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.select_type_btn span {
+  font-size: 25px;
+  font-weight: 100;
+}
+
+.search_button button {
+  width: 345px;
+  height: 44px;
+  border-radius: 8px;
+  background-color: #151515;
+  color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
