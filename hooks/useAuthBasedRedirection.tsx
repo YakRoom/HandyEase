@@ -1,11 +1,11 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
+const isServer = typeof window === "undefined";
 export default function useAuthBasedRedirection() {
   const router = useRouter();
 
-  const hasToken = localStorage.getItem("token");
+  const hasToken = !isServer && localStorage ? localStorage.getItem("token") : "";
   const authRoutes = ["/auth/login", "/auth/sign-up"];
   const pathname = usePathname();
   const isAuthenticatedRoute = authRoutes.includes(pathname);

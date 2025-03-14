@@ -1,19 +1,17 @@
 "use client";
 import { useAuthControllerSignIn } from "@/apis/generated";
 // import { useAuthControllerSignIn } from "@/apis/generated";
-import Header from "@/components/AuthHeader";
 import { Button, Input } from "@/components/ui";
 import WhitePaper from "@/components/ui/white-paper";
 import { useAppContext } from "@/context/AppContext";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-// import { useEffect } from "react";
-export const TOKEN_KEY = "token";
+import { TOKEN_KEY } from "./constants";
+import get from 'lodash/get'
+const ISSERVER = typeof window === "undefined";
 
-export default function LoginPage({}: Readonly<{
-  children: React.ReactNode;
-}>) {
+
+export default function LoginPage() {
   useAuthBasedRedirection();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,21 +19,20 @@ export default function LoginPage({}: Readonly<{
 
   const { mutate: signIn, data, isPending } = useAuthControllerSignIn();
   const { dispatch } = useAppContext();
-  console.log(data);
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem(TOKEN_KEY, data?.access_token);
+      if (!ISSERVER && localStorage) localStorage.setItem(TOKEN_KEY, get(data , 'access_token'));
       dispatch({
         type: "SET_USER",
-        payload: data.user,
+        payload: get(data , 'user'),
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   const validateForm = () => {
     let isValid = true;
-    let newErrors = { email: "", password: "" };
+    const newErrors = { email: "", password: "" };
 
     // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
     // if (!emailRegex.test(email)) {
@@ -82,7 +79,7 @@ export default function LoginPage({}: Readonly<{
                 letterSpacing: "0",
               }}
             >
-              What's your phone number or email
+              What&apos;s your phone number or email
             </h1>
           </div>
 

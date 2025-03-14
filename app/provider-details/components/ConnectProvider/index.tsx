@@ -1,7 +1,8 @@
-import { TOKEN_KEY } from "@/app/auth/login/page";
+import { TOKEN_KEY } from "../../../auth/login/constants";
 import WhitePaper from "@/components/ui/white-paper";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
+ISSERVER = typeof window === "undefined";
 
 interface ProviderData {
   user: {
@@ -19,7 +20,7 @@ interface ConnectSectionProps {
 
 const ConnectSection: React.FC<ConnectSectionProps> = ({ providerData }) => {
   const router = useRouter();
-  const isAuthenticated = localStorage.getItem(TOKEN_KEY);
+  const isAuthenticated = !ISSERVER && localStorage ? localStorage.getItem(TOKEN_KEY) : '';
 
   const redirectToLogin = () => {
     // Store current path for post-login redirect

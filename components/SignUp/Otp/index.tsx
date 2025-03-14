@@ -1,22 +1,22 @@
 import { FC, memo, useEffect, useState } from "react";
 import {
-  Input,
+  // Input,
   Button,
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  InputOTPSeparator,
+  // InputOTPSeparator,
 } from "@/components/ui";
 import { useAppContext } from "@/context/AppContext";
 import { useAuthControllerVerifyOtp } from "@/apis/generated";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const OtpStep: FC = () => {
   const { state } = useAppContext();
   const [otp, setOtp] = useState<number>();
   const { mutate, data } = useAuthControllerVerifyOtp();
-  const router = useRouter();
+  // const router = useRouter();
   const { dispatch } = useAppContext();
   useAuthBasedRedirection();
   useEffect(() => {
@@ -26,7 +26,7 @@ const OtpStep: FC = () => {
         payload: data?.user,
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
   // console.log(data);
 
   const otpSlotClasses="bg-[#F4F4F4] w-[45] h-[45] rounded-[6px]"

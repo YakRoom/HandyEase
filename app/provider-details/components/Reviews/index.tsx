@@ -1,4 +1,5 @@
 import WhitePaper from "@/components/ui/white-paper";
+import Image from "next/image";
 import React from "react";
 
 const mockreviews = [
@@ -12,7 +13,7 @@ const mockreviews = [
   },
 ];
 
-const Reviews = ({ reviews = mockreviews }: { reviews: Array<any> }) => {
+const Reviews = ({ reviews = mockreviews }: { reviews: Array<any> }) => { // eslint-disable-line  @typescript-eslint/no-explicit-any 
   return (
     <WhitePaper>
       <div>
@@ -34,7 +35,7 @@ const Reviews = ({ reviews = mockreviews }: { reviews: Array<any> }) => {
             <div key={review.id} className="py-3">
               {/* User Info */}
               <div className="flex items-center space-x-3">
-                <img
+                <Image
                   src={review.avatar}
                   alt={review.name}
                   className="w-6 h-6 rounded-full object-cover"

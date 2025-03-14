@@ -4,7 +4,7 @@ import { useErrorObserver } from "@/hooks/useErrorObserver";
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
 
 // Define types for the state
-interface AppState {
+export interface AppState {
   user: {
     id?: string;
     name?: string;

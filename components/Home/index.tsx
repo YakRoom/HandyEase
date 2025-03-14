@@ -12,30 +12,30 @@ import { useAppContext } from "@/context/AppContext";
 
 const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
-  const [servicesArray, setServicesArray] = useState([
-    {
-      checked: "",
-      name: "Cleaner",
-      description: "Choose from various ser Service done",
-      img: "",
-      type: "cleaning",
-    },
-    {
-      checked: "",
-      name: "Handyman",
-      description: "Deep Clean, Move ot cleaning, Win",
-      img: "",
-      type: "Service",
-    },
-  ]);
-  const handleSelect = (index) => {
-    setServicesArray((prevServices) =>
-      prevServices.map((service, i) => ({
-        ...service,
-        checked: i === index, // Only the clicked item will be checked, others will be unchecked
-      }))
-    );
-  };
+  // const [,setServicesArray] = useState([
+  //   {
+  //     checked: "",
+  //     name: "Cleaner",
+  //     description: "Choose from various ser Service done",
+  //     img: "",
+  //     type: "cleaning",
+  //   },
+  //   {
+  //     checked: "",
+  //     name: "Handyman",
+  //     description: "Deep Clean, Move ot cleaning, Win",
+  //     img: "",
+  //     type: "Service",
+  //   },
+  // ]);
+  // const handleSelect = (index) => {
+  //   setServicesArray((prevServices) =>
+  //     prevServices.map((service, i) => ({
+  //       ...service,
+  //       checked: i === index, // Only the clicked item will be checked, others will be unchecked
+  //     }))
+  //   );
+  // };
 
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
@@ -51,7 +51,7 @@ const Home: FC = () => {
         }
       );
     }
-  }, [mutate]);
+  }, [mutate, state?.searchedLocation?.placeId]);
 
   const providers = data?.providers ?? [];
   const providersList = viewAll ? providers : providers.slice(0, 2);

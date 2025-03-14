@@ -8,7 +8,7 @@ const LoginCredentails: FC = () => {
     <div className="bg-gray-50 m-4 rounded-xl p-8 h-full">
       <div className="flex flex-col gap-4 bg-white rounded-xl p-4">
         <div className="text-2xl font-bold">
-          What's your phone number or email?
+          What&apos;s your phone number or email?
         </div>
         <Input
           placeholder="Email or phone number"

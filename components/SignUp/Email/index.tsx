@@ -1,9 +1,10 @@
 import { FC, memo, useEffect, useState } from "react";
 import { Input, Button } from "@/components/ui";
 import { useAuthControllerSignUp } from "@/apis/generated";
-import { TOKEN_KEY } from "@/app/auth/login/page";
+import { TOKEN_KEY } from "@/app/auth/login/constants";
 import { useAppContext } from "@/context/AppContext";
 import WhitePaper from "@/components/ui/white-paper";
+const isServer = typeof window === "undefined";
 
 const EmailStep: FC = ({ userType }) => {
   const [email, setEmail] = useState("");
@@ -17,17 +18,17 @@ const EmailStep: FC = ({ userType }) => {
 
   useEffect(() => {
     if (data?.access_token) {
-      localStorage.setItem(TOKEN_KEY, data?.access_token);
+      if (!isServer && localStorage) localStorage.setItem(TOKEN_KEY, data?.access_token);
       dispatch({
         type: "SET_USER",
         payload: data?.user,
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   const validateForm = () => {
-    let isValid = true;
-    let newErrors = { email: "", password: "" };
+    const isValid = true;
+    const newErrors = { email: "", password: "" };
 
     // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
     // if (!emailRegex.test(email)) {
@@ -62,7 +63,7 @@ const EmailStep: FC = ({ userType }) => {
   return (
     <WhitePaper>
       <div className="flex flex-col gap-4">
-        <div className="text-2xl font-bold">What's your email?</div>
+        <div className="text-2xl font-bold">What&apos;s your email?</div>
 
         <div>
           <Input
