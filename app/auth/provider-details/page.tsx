@@ -7,9 +7,7 @@ import {
 } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import { useAppContext } from "@/context/AppContext";
-import useAuthBasedRedirection, {
-  useProviderRoute,
-} from "@/hooks/useAuthBasedRedirection";
+import { useProviderRoute } from "@/hooks/routeHooks";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useReducer, useState } from "react";
 import Image from "next/image";

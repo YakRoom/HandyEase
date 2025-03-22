@@ -7,7 +7,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useEffect, useState } from "react";
 import SignUpSelector from "@/components/SignUp/SignUpSelector";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+import { usePublicRoute } from "@/hooks/routeHooks";
 import { useRouter } from "next/navigation";
 
 interface User {
@@ -20,14 +20,13 @@ interface User {
 }
 
 export default function Credentials() {
+  usePublicRoute();
   const [step, setStep] = useState(0);
   const { state } = useAppContext();
   const router = useRouter();
   const [userType, setUserType] = useState<CreateUserDtoRole | null>(
     state?.user?.role || null
   );
-  useAuthBasedRedirection();
-
   // Helper functions to determine signup flow steps
   const determineSignupStep = (user: User | null | undefined) => {
     if (user?.otp) return 2;

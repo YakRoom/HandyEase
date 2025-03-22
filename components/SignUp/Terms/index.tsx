@@ -4,13 +4,11 @@ import { useUsersControllerUpdateUserInfo } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import WhitePaper from "@/components/ui/white-paper";
 import { AppState, useAppContext } from "@/context/AppContext";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 import { get } from "lodash";
 import { useRouter } from "next/navigation";
 import { memo, useEffect, useState } from "react";
 
 const TermsConditions: FC<{ setStep: any }> = ({ setStep }) => {
-  useAuthBasedRedirection();
   const router = useRouter();
   const { mutate, data } = useUsersControllerUpdateUserInfo();
   const { dispatch, state } = useAppContext();
