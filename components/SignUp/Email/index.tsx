@@ -4,15 +4,16 @@ import { useAuthControllerSignUp } from "@/apis/generated";
 import { TOKEN_KEY } from "@/app/auth/login/constants";
 import { useAppContext } from "@/context/AppContext";
 import WhitePaper from "@/components/ui/white-paper";
-import { useSearchParams } from 'next/navigation'
+import { CreateUserDtoRole } from "@/apis/generated.schemas";
 const isServer = typeof window === "undefined";
 
-const EmailStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = ({ setStep }) => {
+const EmailStep: FC<{
+  userType: CreateUserDtoRole;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ userType, setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-  const searchParams = useSearchParams();
-  const userRole = searchParams.get('userType');
 
   const { dispatch } = useAppContext();
 
@@ -21,7 +22,8 @@ const EmailStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> =
 
   useEffect(() => {
     if (data?.access_token) {
-      if (!isServer && localStorage) localStorage.setItem(TOKEN_KEY, data?.access_token);
+      if (!isServer && localStorage)
+        localStorage.setItem(TOKEN_KEY, data?.access_token);
       dispatch({
         type: "SET_USER",
         payload: data?.user,
@@ -58,7 +60,7 @@ const EmailStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> =
         data: {
           email,
           password,
-          role: userRole,
+          role: userType,
         },
       });
     }

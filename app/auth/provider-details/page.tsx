@@ -63,7 +63,7 @@ const ProviderSetup = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const { mutate } = useProvidersControllerCreateProvider();
-  const { state: appState } = useAppContext();
+  const { state: appState, dispatch: appDispatch } = useAppContext();
   const isNewCreation =
     appState?.user?.role === CreateUserDtoRole.PROVIDER &&
     appState?.user?.policyAccepted;
@@ -126,7 +126,6 @@ const ProviderSetup = () => {
 
   useEffect(() => {
     if (appState?.user?.role === CreateUserDtoRole.CONSUMER) {
-      console.log("hiiiiiiiii");
       router.replace("/");
     }
   }, [appState?.user, router]);
@@ -192,7 +191,10 @@ const ProviderSetup = () => {
       } else {
         mutate({ data: providerData });
       }
-      router.replace("/");
+      appDispatch({
+        type: "SET_ONBOARDED",
+        payload: true,
+      });
     } catch (error) {
       console.error("Error saving provider details:", error);
       setErrors({
