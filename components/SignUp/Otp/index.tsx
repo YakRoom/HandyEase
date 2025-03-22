@@ -9,11 +9,11 @@ import {
 } from "@/components/ui";
 import { useAppContext } from "@/context/AppContext";
 import { useAuthControllerVerifyOtp } from "@/apis/generated";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+// import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 import { ArrowRight } from "lucide-react";
 // import { useRouter } from "next/navigation";
 
-const OtpStep: FC<{ setStep: any }> = ({ setStep }) => {
+const OtpStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = ({ setStep }) => {
   const { state } = useAppContext();
   const [otp, setOtp] = useState<number>();
   const { mutate, data } = useAuthControllerVerifyOtp();

@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable */
 import {
   useAuthControllerSignIn,
   useProvidersControllerGetMyProviderDetails,
@@ -23,7 +24,8 @@ export default function LoginPage() {
   const router = useRouter();
   const { mutate: signIn, data, isPending } = useAuthControllerSignIn();
   const { dispatch } = useAppContext();
-  const { isPending: isProviderPending } =
+
+
     useProvidersControllerGetMyProviderDetails({
       query: {
         enabled:
@@ -31,13 +33,13 @@ export default function LoginPage() {
           state?.user?.policyAccepted,
         refetchOnMount: false,
       },
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         const isProviderDetailsEmpty = Object.values(data || {}).length === 0;
         if (isProviderDetailsEmpty) {
           router.replace("/auth/provider-details");
         }
       },
-    });
+    } as any);
 
   useEffect(() => {
     if (data) {
@@ -56,12 +58,6 @@ export default function LoginPage() {
   const validateForm = () => {
     let isValid = true;
     const newErrors = { email: "", password: "" };
-
-    // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
-    // if (!emailRegex.test(email)) {
-    //   newErrors.email = "Invalid email format";
-    //   isValid = false;
-    // }
 
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;

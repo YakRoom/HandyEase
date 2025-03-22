@@ -30,7 +30,7 @@ const Footer: FC = () => {
       <div className="bg-black h-max w-full text-white p-4 flex flex-col gap-4 pt-10">
         <div className="font-bold">Handymate</div>
         <Link href={""}>Visit Help Center</Link>
-        <Link href={""}>Learn more about company's mission</Link>
+        <Link href={""}>Learn more about company&apos;s mission</Link>
         <div className="font-bold mt-8">Company</div>
         <Link href={""}>Our offerings</Link>
         <Link href={""}>Newsroom</Link>

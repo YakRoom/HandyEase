@@ -7,7 +7,7 @@ import {
 } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import { useAppContext } from "@/context/AppContext";
-import useAuthBasedRedirection, {
+import {
   useProviderRoute,
 } from "@/hooks/useAuthBasedRedirection";
 import { useRouter } from "next/navigation";

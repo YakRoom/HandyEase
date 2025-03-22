@@ -9,7 +9,7 @@ import { get } from "lodash";
 import { useRouter } from "next/navigation";
 import { memo, useEffect, useState } from "react";
 
-const TermsConditions: FC<{ setStep: any }> = ({ setStep }) => {
+const TermsConditions: FC = () => {
   useAuthBasedRedirection();
   const router = useRouter();
   const { mutate, data } = useUsersControllerUpdateUserInfo();

@@ -7,7 +7,7 @@ import WhitePaper from "@/components/ui/white-paper";
 import { useSearchParams } from 'next/navigation'
 const isServer = typeof window === "undefined";
 
-const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) => {
+const EmailStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = ({ setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -28,7 +28,7 @@ const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) =
       });
       setStep((prev: number) => prev + 1);
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, setStep]);
 
   const validateForm = () => {
     let isValid = true;

@@ -1,16 +1,14 @@
 import { FC, memo, useEffect, useState } from "react";
 import { Input, Button } from "@/components/ui";
 import { useUsersControllerUpdateUserInfo } from "@/apis/generated";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 // import { CreateUserDtoRole } from "@/apis/generated.schemas";
 // import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 import { ArrowRight } from "lucide-react";
 
-const NameStep: FC<{ setStep: any }> = ({ setStep }) => {
+const NameStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = ({ setStep }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  //   useAuthBasedRedirection();
   const { mutate, data } = useUsersControllerUpdateUserInfo();
   const { dispatch } = useAppContext();
   // const router = useRouter();

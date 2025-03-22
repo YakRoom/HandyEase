@@ -4,9 +4,7 @@ import Logo from "@/public/images/logo.png";
 import { usePathname, useRouter } from "next/navigation";
 import Close from "@/public/images/close.svg";
 import Hamburger from "@/public/images/hamBurger.svg";
-import { TOKEN_KEY } from "@/app/auth/login/constants";
 import { useAppContext } from "@/context/AppContext";
-const isServer = typeof window === "undefined";
 
 const signUpRoutes = ["/auth/sign-up"];
 
