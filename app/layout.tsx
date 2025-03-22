@@ -5,7 +5,7 @@ import QueryWrapper from "@/components/wrappers/QueryWrapper";
 import { AppProvider } from "@/context/AppContext";
 import { ErrorBoundary } from "@/components/wrappers/ErrorBoundary";
 import Footer from "@/components/Footer";
-import Header from "@/components/AuthHeader";
+// import Header from "@/components/AuthHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -19,7 +19,7 @@ const SearchProviders = (props) => {
     }, 300);
 
     return () => clearTimeout(delayDebounceFn); // Cleanup on re-typing
-  }, [search]);
+  }, [search, mutateSuggestions]);
 
   const handleSelectSuggestion = (option) => {
     onSelect(option);

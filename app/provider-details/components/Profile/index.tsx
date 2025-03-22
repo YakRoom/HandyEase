@@ -2,6 +2,7 @@ import WhitePaper from "@/components/ui/white-paper";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Image from 'next/image'; 
 
 const Profile = ({ provider, editProfile }) => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const Profile = ({ provider, editProfile }) => {
       <div>
         {/* Profile Header */}
         <div className="flex items-center space-x-4">
-          <img
+          <Image
             src={provider.providerPicture || "https://placehold.co/50"}
             alt="Profile"
             className="w-14 h-14 rounded-full object-cover"
@@ -109,7 +110,7 @@ export const ConsumerProfile = () => {
       <div>
         {/* Profile Header */}
         <div className="flex items-center space-x-4">
-          <img
+          <Image
             src={state?.user?.profilePicture || "https://placehold.co/50"}
             alt="Profile"
             className="w-14 h-14 rounded-full object-cover"

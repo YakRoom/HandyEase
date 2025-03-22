@@ -2,7 +2,7 @@
 import {
   useProvidersControllerCreateProvider,
   useProvidersControllerGetMyProviderDetails,
-  useProvidersControllerGetSuggestions,
+  // useProvidersControllerGetSuggestions,
   useProvidersControllerUpdateMyDetails,
 } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
@@ -16,64 +16,7 @@ import SearchProviders from "@/components/SearchProviders";
 import WhitePaper from "@/components/ui/white-paper";
 import { Button } from "@/components/ui";
 import Service from "@/public/images/service.svg";
-
-interface ProviderState {
-  profilePic: string;
-  payRate: number | null;
-  experience: number | null;
-  radius: number;
-  phone: string;
-  allowCalls: boolean;
-  resume: string | File;
-  about: string;
-  skills: string[];
-  locationName: string;
-  locationId: string;
-}
-
-interface ValidationErrors {
-  [key: string]: string;
-}
-
-type FieldValue = string | number | boolean | File | string[] | null;
-
-type ProviderAction =
-  | { type: "SET_FIELD"; field: keyof ProviderState; value: FieldValue }
-  | { type: "TOGGLE_CALLS" }
-  | { type: "ADD_SKILL"; skill: string }
-  | { type: "REMOVE_SKILL"; skill: string }
-  | { type: "SET_RESUME"; file: File }
-  | { type: "BULK_UPDATE"; action: any }
-  | { type: "SET_LOCATION"; locationId: string; locationName: string };
-const DEFAULT_RADIUS = 5;
-const MIN_RADIUS = 1;
-const MAX_RADIUS = 50;
-
-export const HANDYMEN = [
-  { label: "Electrician", key: "ELECTRICIAN" },
-  { label: "Plumber", key: "PLUMBER" },
-  { label: "Gardener", key: "GARDENER" },
-  { label: "Carpenter", key: "CARPENTER" },
-  { label: "Painter", key: "PAINTER" },
-];
-export const CLEANER = [{ label: "Cleaner", key: "CLEANER" }];
-export const OTHERS = [{ label: "Baby Sitter", key: "BABY_SITTER" }];
-
-const AVAILABLE_SKILL = { HANDYMEN, CLEANER, OTHERS };
-
-const initialState: ProviderState = {
-  profilePic: "",
-  payRate: null,
-  experience: null,
-  radius: DEFAULT_RADIUS,
-  phone: "",
-  allowCalls: false,
-  resume: "",
-  about: "",
-  skills: [],
-  locationName: "",
-  locationId: "",
-};
+import { AVAILABLE_SKILL, ProviderAction, ProviderState, initialState, MIN_RADIUS, MAX_RADIUS } from './constants';
 
 function reducer(state: ProviderState, action: ProviderAction): ProviderState {
   switch (action.type) {
@@ -331,7 +274,7 @@ const ProviderSetup = () => {
       ) : (
         <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold text-gray-800">
-            Let's get to know you more
+            Let&apos;s get to know you more
           </h2>
 
           <div className="flex flex-col items-center mt-4">

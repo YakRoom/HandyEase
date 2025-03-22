@@ -4,7 +4,8 @@ import Logo from "@/public/images/logo.png";
 import { usePathname, useRouter } from "next/navigation";
 import Close from "@/public/images/close.svg";
 import Hamburger from "@/public/images/hamBurger.svg";
-import { TOKEN_KEY } from "@/app/auth/login/page";
+import { TOKEN_KEY } from "@/app/auth/login/constants";
+const isServer = typeof window === "undefined";
 
 const signUpRoutes = ["/auth/sign-up"];
 
@@ -20,12 +21,12 @@ const emptyRightSectionRoutes = [
 const selectedClass =
   "font-medium text-[16px] text-[#15151599] bg-[#E1E1E1] top-[14px] right-0 bottom-[14px] left-[12px] rounded-3xl";
 
-export default function Header({}: Readonly<{}>) {
+export default function Header({}: Readonly<any>) { // eslint-disable-line  @typescript-eslint/no-explicit-any 
   const pathname = usePathname();
   const isLoginRoute = loginRoute.includes(pathname);
   const isSignUpRoute = signUpRoutes.includes(pathname);
   const showHamBurger =
-    localStorage.getItem(TOKEN_KEY) && !(isLoginRoute || isSignUpRoute);
+  !isServer && localStorage ? localStorage.getItem(TOKEN_KEY) && !(isLoginRoute || isSignUpRoute) : '';
   const showRightCtas = emptyRightSectionRoutes.includes(pathname);
   const showExit = isLoginRoute || isSignUpRoute;
   const router = useRouter();
