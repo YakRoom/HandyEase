@@ -1,18 +1,38 @@
 "use client";
 import GreyPaper from "@/components/ui/grey-paper";
-import Profile from "../provider-details/components/Profile";
+import Profile, {
+  ConsumerProfile,
+} from "../provider-details/components/Profile";
 import Reviews from "../provider-details/components/Reviews";
 import { useProvidersControllerGetMyProviderDetails } from "@/apis/generated";
+import { useAppContext } from "@/context/AppContext";
+import { CreateUserDtoRole } from "@/apis/generated.schemas";
+import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
 
 const ViewProfile = () => {
+  useAuthBasedRedirection();
+  const { state } = useAppContext();
   const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
-    userId: "",
+    query: {
+      enabled: state?.user?.role === CreateUserDtoRole.PROVIDER,
+    },
   });
-  console.log(providerDetails);
+
+  if (!providerDetails && state?.user?.role === CreateUserDtoRole.PROVIDER) {
+    return <div>Loading...</div>;
+  }
+
+  const reviews = providerDetails
+    ? providerDetails?.user?.reviewsReceived
+    : state?.user?.reviewsReceived;
+
   return (
     <GreyPaper>
-      <Profile editProfile />
-      <Reviews />
+      {state?.user?.role === CreateUserDtoRole.CONSUMER && <ConsumerProfile />}
+      {state?.user?.role === CreateUserDtoRole.PROVIDER && (
+        <Profile editProfile provider={providerDetails} />
+      )}
+      {state?.user && <Reviews reviews={reviews} />}
     </GreyPaper>
   );
 };

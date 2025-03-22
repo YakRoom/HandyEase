@@ -1,15 +1,16 @@
 import { FC, memo, useEffect, useState } from "react";
 import {
-  Input,
+  // Input,
   Button,
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  InputOTPSeparator,
+  // InputOTPSeparator,
 } from "@/components/ui";
 import { useAppContext } from "@/context/AppContext";
 import { useAuthControllerVerifyOtp } from "@/apis/generated";
 import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+// import { useRouter } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
@@ -17,7 +18,7 @@ const OtpStep: FC<{ setStep: any }> = ({ setStep }) => {
   const { state } = useAppContext();
   const [otp, setOtp] = useState<number>();
   const { mutate, data } = useAuthControllerVerifyOtp();
-  const router = useRouter();
+  // const router = useRouter();
   const { dispatch } = useAppContext();
   // useAuthBasedRedirection();
   useEffect(() => {
@@ -27,8 +28,10 @@ const OtpStep: FC<{ setStep: any }> = ({ setStep }) => {
         payload: data?.user,
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
   // console.log(data);
+
+  const otpSlotClasses="bg-[#F4F4F4] w-[45] h-[45] rounded-[6px]"
   return (
     <div className="bg-gray-50 m-4 rounded-xl p-8 h-full">
       <div className="flex flex-col gap-4 bg-white rounded-xl p-4">

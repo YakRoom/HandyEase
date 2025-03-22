@@ -1,7 +1,8 @@
 import WhitePaper from "@/components/ui/white-paper";
+import Image from "next/image";
 import React from "react";
 
-const reviews = [
+const mockreviews = [
   {
     id: 1,
     name: "William Quarry",
@@ -10,25 +11,9 @@ const reviews = [
     review:
       "Great job! Booked a deep clean done on time with amazing skills. Very satisfied, showed on time, the fee was budget-friendly.",
   },
-  {
-    id: 2,
-    name: "Joyce",
-    rating: 3,
-    avatar: "https://placehold.co/20", // Replace with actual image
-    review:
-      "Great job! Booked a deep clean done on time with amazing skills. Very satisfied, showed on time, the fee was budget-friendly.",
-  },
-  {
-    id: 3,
-    name: "Mac",
-    rating: 4,
-    avatar: "https://placehold.co/20", // Replace with actual image
-    review:
-      "Great job! Booked a deep clean done on time with amazing skills. Very satisfied, showed on time, the fee was budget-friendly.",
-  },
 ];
 
-const Reviews = () => {
+const Reviews = ({ reviews = mockreviews }: { reviews: Array<any> }) => { // eslint-disable-line  @typescript-eslint/no-explicit-any 
   return (
     <WhitePaper>
       <div>
@@ -46,11 +31,11 @@ const Reviews = () => {
         {/* Top Reviews */}
         <h4 className="mt-3 font-semibold text-gray-800">Top reviews</h4>
         <div className="mt-2">
-          {reviews.map((review) => (
+          {mockreviews.map((review) => (
             <div key={review.id} className="py-3">
               {/* User Info */}
               <div className="flex items-center space-x-3">
-                <img
+                <Image
                   src={review.avatar}
                   alt={review.name}
                   className="w-6 h-6 rounded-full object-cover"
@@ -81,9 +66,11 @@ const Reviews = () => {
         </div>
 
         {/* View All Button */}
-        <button className="w-full bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg mt-4">
-          View all
-        </button>
+        {reviews.length > 3 && (
+          <button className="w-full bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg mt-4">
+            View all
+          </button>
+        )}
       </div>
     </WhitePaper>
   );

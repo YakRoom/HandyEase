@@ -2,8 +2,6 @@
 
 import OtpStep from "@/components/SignUp/Otp";
 
-export default function OtpVerificationPage({}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function OtpVerificationPage() {
   return <OtpStep />;
 }

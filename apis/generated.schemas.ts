@@ -70,6 +70,8 @@ export interface CreateProviderDto {
   phoneNumber: string;
   /** Whether to show the phone number */
   showPhoneNumber: boolean;
+  /** Is price negotiable */
+  isNegotiable: boolean;
   /**
    * Hourly rate charged by the provider
    * @minimum 0
@@ -99,6 +101,8 @@ export interface UpdateProviderDto {
   phoneNumber?: string;
   /** Whether to show the phone number */
   showPhoneNumber?: boolean;
+  /** Is price negotiable */
+  isNegotiable?: boolean;
   /**
    * Hourly rate charged by the provider
    * @minimum 0
@@ -149,7 +153,7 @@ export interface ChangeProviderStatusDto { [key: string]: unknown }
 
 export interface SuggestionDto { [key: string]: unknown }
 
-export type ProvidersControllerGetMyProviderDetailsParams = {
+export type ProvidersControllerGetProviderDetailsParams = {
 userId: string;
 };
 

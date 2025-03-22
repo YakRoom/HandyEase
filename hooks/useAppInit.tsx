@@ -19,18 +19,16 @@ export function useAppInit(state: any, dispatch: any) {
       refetchOnMount: false,
     },
   });
-  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails(
-    {},
-    {
-      query: {
-        enabled:
-          state?.user?.role === CreateUserDtoRole.PROVIDER &&
-          state?.user?.policyAccepted,
-        refetchOnMount: false,
-      },
-    }
-  );
-  const isDetailsFilled = Object.values(providerDetails || {}).length;
+
+  const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
+    query: {
+      enabled:
+        state?.user?.role === CreateUserDtoRole.PROVIDER &&
+        state?.user?.policyAccepted,
+      refetchOnMount: false,
+    },
+  });
+  const isDetailsFilled = !!Object.values(providerDetails || {}).length;
 
   useEffect(() => {
     if (hasToken && data) {
@@ -55,7 +53,7 @@ export function useAppInit(state: any, dispatch: any) {
   }, [state.user]);
 
   useEffect(() => {
-    if (state?.user) {
+    if (state?.user && providerDetails) {
       if (
         state?.user?.role === CreateUserDtoRole.PROVIDER &&
         !isDetailsFilled &&
@@ -64,7 +62,7 @@ export function useAppInit(state: any, dispatch: any) {
         router.replace("/auth/provider-details");
       }
     }
-  }, [state.user, isDetailsFilled]);
+  }, [state.user, providerDetails]);
 
   return initApisLoading;
 }

@@ -1,6 +1,6 @@
 module.exports = {
   api: {
-    input: "http://localhost:3000/swagger.json",
+    input: "https://api.yakroom.com/swagger.json",
     output: {
       target: "./apis/generated.ts",
       client: "react-query",

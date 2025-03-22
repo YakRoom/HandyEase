@@ -6,9 +6,7 @@ import Terms from '@/components/SignUp/Terms';
 import OtpStep from '@/components/SignUp/Otp';
 import { useState } from 'react';
 
-export default function Credentials({}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Credentials() {
     const [step, setStep] = useState(0)
   return (
     <>

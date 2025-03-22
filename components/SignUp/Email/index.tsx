@@ -1,67 +1,133 @@
 import { FC, memo, useEffect, useState } from "react";
 import { Input, Button } from "@/components/ui";
 import { useAuthControllerSignUp } from "@/apis/generated";
-import { TOKEN_KEY } from "@/app/auth/login/page";
-import { useRouter } from "next/navigation";
+import { TOKEN_KEY } from "@/app/auth/login/constants";
 import { useAppContext } from "@/context/AppContext";
+import WhitePaper from "@/components/ui/white-paper";
+const isServer = typeof window === "undefined";
 
 const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { dispatch } = useAppContext();
-  const router = useRouter();
+  const [errors, setErrors] = useState({ email: "", password: "" });
 
-  const { mutate, data } = useAuthControllerSignUp();
+  const { dispatch } = useAppContext();
+
+  const { mutate, data, isPending } = useAuthControllerSignUp();
+  //  console.log("data",data);
 
   useEffect(() => {
     if (data?.access_token) {
-      localStorage.setItem(TOKEN_KEY, data?.access_token);
+      if (!isServer && localStorage) localStorage.setItem(TOKEN_KEY, data?.access_token);
       dispatch({
         type: "SET_USER",
         payload: data?.user,
       });
     }
-  }, [data]);
+  }, [data, dispatch]);
+
+  const validateForm = () => {
+    const isValid = true;
+    const newErrors = { email: "", password: "" };
+
+    // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(email)) {
+    //   newErrors.email = "Invalid email format";
+    //   isValid = false;
+    // }
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      newErrors.password =
+        "Password must be 8+ chars, include uppercase, number & special char";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      mutate({
+        data: {
+          email,
+          password,
+          role: userType,
+        },
+      });
+      setStep((prev: number) => prev + 1);
+    }
+  };
 
   return (
-    <div className="bg-gray-50 m-4 rounded-xl p-8 h-full">
-      <div className="flex flex-col gap-4 bg-white rounded-xl p-4">
-        <div className="text-2xl font-bold">What's your email?</div>
-        <Input
+    <WhitePaper>
+      <div className="flex flex-col gap-4">
+        <div className="text-2xl font-bold">What&apos;s your email?</div>
+
+        <div>
+          <Input
+            placeholder="Email"
+            type="email"
+            className="bg-stone-200 h-11"
+            value={email}
+            onChange={(e) => {
+              setEmail(e?.target?.value);
+              setErrors((prev) => ({ ...prev, email: "" }));
+            }}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+          )}
+          {data && data.code == "EMAIL_EXISTS" && (
+            <p className="text-red-500 text-sm mt-2">{data.message}</p>
+          )}
+        </div>
+        {/* <Input
           placeholder="Email"
           type="email"
           className="bg-stone-200 h-11"
           value={email}
           onChange={(e) => setEmail(e?.target?.value)}
-        />
-        <Input
+        /> */}
+        <div>
+          <Input
+            placeholder="Password"
+            type="password"
+            className="bg-stone-200 h-11"
+            value={password}
+            onChange={(e) => {
+              setPassword(e?.target?.value);
+              setErrors((prev) => ({ ...prev, password: "" }));
+            }}
+          />
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+          )}
+        </div>
+        {/* <Input
           placeholder="Password"
           type="password"
           className="bg-stone-200 h-11"
           value={password}
           onChange={(e) => setPassword(e?.target?.value)}
-        />
+        /> */}
         <Button
-          onClick={() => {
-            mutate({
-              data: {
-                email,
-                password,
-                role: userType,
-              },
-            });
-            setStep((prev: number) => prev + 1);
-          }}
+          onClick={handleSubmit}
           disabled={!email || !password}
+          isLoading={isPending}
         >
           Submit
         </Button>
+
         <div className="text-sm mt-16">
           Get the job done with low prices connect directly with 100s of crew
           member in your local area
         </div>
       </div>
-    </div>
+    </WhitePaper>
   );
 };
 

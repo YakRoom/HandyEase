@@ -1,6 +1,7 @@
 import { Button } from "../ui";
 import Image from "next/image";
 import Service from "@/public/images/service.svg"; 
+import { memo, FC } from 'react';
 
 const Services: FC = () => {
     return (
@@ -38,3 +39,5 @@ const Services: FC = () => {
       </div>
     )
 }
+
+export default memo(Services);

@@ -5,8 +5,8 @@ import Facebook from "@/public/images/facebook.svg";
 import Twitter from "@/public/images/twitter.svg";
 import Linkedin from "@/public/images/linkedin.svg";
 import Image from "next/image";
-import Service from "@/public/images/service.svg";
-import { Button } from "../ui/button";
+// import Service from "@/public/images/service.svg";
+// import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 
 const noFooterRoutes = [
@@ -27,7 +27,6 @@ const Footer: FC = () => {
     return null;
   }
   return (
-    <>
       <div className="bg-black h-max w-full text-white p-4 flex flex-col gap-4 pt-10">
         <div className="font-bold">Handymate</div>
         <Link href={""}>Visit Help Center</Link>
@@ -54,7 +53,6 @@ const Footer: FC = () => {
           <Link href={""}>Terms</Link>
         </div>
       </div>
-    </>
   );
 };
 

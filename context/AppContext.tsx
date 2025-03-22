@@ -1,25 +1,25 @@
 "use client";
 import { useAppInit } from "@/hooks/useAppInit";
 import { useErrorObserver } from "@/hooks/useErrorObserver";
-import React, {
-  createContext,
-  useContext,
-  useReducer,
-  ReactNode,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
 
 // Define types for the state
-interface AppState {
+export interface AppState {
   user: {
     id?: string;
     name?: string;
   } | null;
   // Add other state properties here
+  searchedLocation: {
+    description: string;
+    placeId: string;
+  } | null;
 }
 
 // Define types for actions
-type AppAction = { type: "SET_USER"; payload: AppState["user"] };
+type AppAction =
+  | { type: "SET_USER"; payload: AppState["user"] }
+  | { type: "SET_SEARCHED_LOCATION"; payload: AppState["searchedLocation"] };
 
 // Define the context type
 interface AppContextType {
@@ -30,6 +30,7 @@ interface AppContextType {
 // Initial state
 const initialState: AppState = {
   user: null,
+  searchedLocation: null,
 };
 
 // Create the reducer
@@ -39,6 +40,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         user: action.payload,
+      };
+    case "SET_SEARCHED_LOCATION":
+      return {
+        ...state,
+        searchedLocation: action.payload,
       };
     default:
       return state;

@@ -1,22 +1,32 @@
 "use client";
 
-import { useProvidersControllerGetMyProviderDetails } from "@/apis/generated";
+import { use } from "react";
+import { useProvidersControllerGetProviderDetails } from "@/apis/generated";
 import GreyPaper from "@/components/ui/grey-paper";
 import ConnectSection from "../components/ConnectProvider";
 import Profile from "../components/Profile";
 import Reviews from "../components/Reviews";
+import Services from "@/components/Services";
 
 const ProviderDetails = ({ params }) => {
-  const { id } = params; // Get the dynamic ID from URLL
-  const providorDetails = useProvidersControllerGetMyProviderDetails({
+  // Unwrap params using React.use()
+  const unwrappedParams = use(params);
+  const { id } = unwrappedParams;
+
+  const { data } = useProvidersControllerGetProviderDetails({
     userId: id,
   });
 
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <GreyPaper>
-      <Profile />
-      <ConnectSection />
-      <Reviews />
+      <Profile provider={data} />
+      <ConnectSection providerData={data} />
+      <Reviews reviews={data?.user?.reviewsReceived} />
+      <Services />
     </GreyPaper>
   );
 };
