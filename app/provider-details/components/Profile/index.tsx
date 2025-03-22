@@ -3,6 +3,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Image from 'next/image'; 
+import Logo from '@/public/images/logo.png';
 
 const Profile = ({ provider, editProfile }) => {
   const router = useRouter();
@@ -22,9 +23,11 @@ const Profile = ({ provider, editProfile }) => {
         {/* Profile Header */}
         <div className="flex items-center space-x-4">
           <Image
-            src={provider.providerPicture || "https://placehold.co/50"}
+            src={provider.providerPicture || Logo}
             alt="Profile"
             className="w-14 h-14 rounded-full object-cover"
+            width={50}
+            height={50}
           />
           <div>
             <h2 className="text-lg font-semibold">
@@ -111,9 +114,11 @@ export const ConsumerProfile = () => {
         {/* Profile Header */}
         <div className="flex items-center space-x-4">
           <Image
-            src={state?.user?.profilePicture || "https://placehold.co/50"}
+            src={state?.user?.profilePicture || Logo}
             alt="Profile"
             className="w-14 h-14 rounded-full object-cover"
+            height={50}
+            width={50}
           />
           <div>
             <h2 className="text-lg font-semibold">

@@ -1,13 +1,14 @@
 import WhitePaper from "@/components/ui/white-paper";
 import Image from "next/image";
 import React from "react";
+import defaultAvatar from '@/public/images/thumbnail.png';
 
 const mockreviews = [
   {
     id: 1,
     name: "William Quarry",
     rating: 5,
-    avatar: "https://placehold.co/20", // Replace with actual image
+    avatar: defaultAvatar, // Replace with actual image
     review:
       "Great job! Booked a deep clean done on time with amazing skills. Very satisfied, showed on time, the fee was budget-friendly.",
   },
@@ -39,6 +40,8 @@ const Reviews = ({ reviews = mockreviews }: { reviews: Array<any> }) => { // esl
                   src={review.avatar}
                   alt={review.name}
                   className="w-6 h-6 rounded-full object-cover"
+                  width={50}
+                  height={50}
                 />
                 <span className="font-medium text-gray-800">{review.name}</span>
               </div>

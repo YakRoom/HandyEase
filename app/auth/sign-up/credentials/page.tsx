@@ -10,7 +10,7 @@ export default function Credentials() {
     const [step, setStep] = useState(0)
   return (
     <>
-    <AuthHeader isLogin={false} />
+    {/* <AuthHeader isLogin={false} /> */}
     {step === 0 && <EmailStep userType={''} setStep={setStep}/>}
     {step === 1 && <OtpStep setStep={setStep}/>}
     {step === 2 && <Name setStep={setStep}/> }

@@ -2,13 +2,18 @@ import { FC } from "react";
 import { ArrowRight } from "lucide-react";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import WhitePaper from "../ui/white-paper";
+import { useRouter } from "next/navigation";
 
-const SignUpSelector: FC<{ setUserType: any }> = ({ setUserType }) => {
+const SignUpSelector: FC = () => {
+  const router = useRouter();
+  const optionSelectHandler = (userType: CreateUserDtoRole) => {
+    router.push(`/auth/sign-up/credentials?userType=${userType}`);
+  };
   return (
     <WhitePaper>
       <div
         className="flex flex-row p-4 gap-4"
-        onClick={() => setUserType(CreateUserDtoRole.CONSUMER)}
+        onClick={() => optionSelectHandler(CreateUserDtoRole.CONSUMER)}
       >
         <div className="flex flex-col gap-16">
           <div className="text-3xl font-bold w-3/5">Sign up as a customer</div>
@@ -24,7 +29,7 @@ const SignUpSelector: FC<{ setUserType: any }> = ({ setUserType }) => {
       </div>
       <div
         className="flex flex-row p-4 gap-4"
-        onClick={() => setUserType(CreateUserDtoRole.PROVIDER)}
+        onClick={() => optionSelectHandler(CreateUserDtoRole.PROVIDER)}
       >
         <div className="flex flex-col gap-16">
           <div className="text-3xl font-bold w-4/5">

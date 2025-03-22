@@ -4,12 +4,15 @@ import { useAuthControllerSignUp } from "@/apis/generated";
 import { TOKEN_KEY } from "@/app/auth/login/constants";
 import { useAppContext } from "@/context/AppContext";
 import WhitePaper from "@/components/ui/white-paper";
+import { useSearchParams } from 'next/navigation'
 const isServer = typeof window === "undefined";
 
 const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
+  const searchParams = useSearchParams();
+  const userRole = searchParams.get('userType');
 
   const { dispatch } = useAppContext();
 
@@ -23,11 +26,12 @@ const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) =
         type: "SET_USER",
         payload: data?.user,
       });
+      setStep((prev: number) => prev + 1);
     }
   }, [data, dispatch]);
 
   const validateForm = () => {
-    const isValid = true;
+    let isValid = true;
     const newErrors = { email: "", password: "" };
 
     // const emailRegex = /^[^\s@]{8,}@[^\s@]+\.[^\s@]+$/;
@@ -54,10 +58,9 @@ const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) =
         data: {
           email,
           password,
-          role: userType,
+          role: userRole,
         },
       });
-      setStep((prev: number) => prev + 1);
     }
   };
 
