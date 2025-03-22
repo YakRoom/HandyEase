@@ -6,7 +6,7 @@ import { useAppContext } from "@/context/AppContext";
 import WhitePaper from "@/components/ui/white-paper";
 const isServer = typeof window === "undefined";
 
-const EmailStep: FC = ({ userType }) => {
+const EmailStep: FC<{ userType: any, setStep: any }> = ({ userType, setStep }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -57,6 +57,7 @@ const EmailStep: FC = ({ userType }) => {
           role: userType,
         },
       });
+      setStep((prev: number) => prev + 1);
     }
   };
 
@@ -108,21 +109,12 @@ const EmailStep: FC = ({ userType }) => {
         </div>
         {/* <Input
           placeholder="Password"
-          type="email"
+          type="password"
           className="bg-stone-200 h-11"
           value={password}
           onChange={(e) => setPassword(e?.target?.value)}
         /> */}
         <Button
-          // onClick={() => {
-          //   mutate({
-          //     data: {
-          //       email,
-          //       password,
-          //       role: userType,
-          //     },
-          //   });
-          // }}
           onClick={handleSubmit}
           disabled={!email || !password}
           isLoading={isPending}

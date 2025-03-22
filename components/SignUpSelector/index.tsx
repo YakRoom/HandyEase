@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import WhitePaper from "../ui/white-paper";
 
-const SignUpSelector: FC = ({ setUserType }) => {
+const SignUpSelector: FC<{ setUserType: any }> = ({ setUserType }) => {
   return (
     <WhitePaper>
       <div
