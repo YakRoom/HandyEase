@@ -1,8 +1,7 @@
-import { TOKEN_KEY } from "../../../auth/login/constants";
 import WhitePaper from "@/components/ui/white-paper";
+import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import React from "react";
-ISSERVER = typeof window === "undefined";
 
 interface ProviderData {
   user: {
@@ -20,7 +19,8 @@ interface ConnectSectionProps {
 
 const ConnectSection: React.FC<ConnectSectionProps> = ({ providerData }) => {
   const router = useRouter();
-  const isAuthenticated = !ISSERVER && localStorage ? localStorage.getItem(TOKEN_KEY) : '';
+  const { state } = useAppContext();
+  const isAuthenticated = state?.isOnboarded;
 
   const redirectToLogin = () => {
     // Store current path for post-login redirect

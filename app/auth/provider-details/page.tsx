@@ -7,7 +7,9 @@ import {
 } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import { useAppContext } from "@/context/AppContext";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+import useAuthBasedRedirection, {
+  useProviderRoute,
+} from "@/hooks/useAuthBasedRedirection";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
@@ -16,7 +18,15 @@ import SearchProviders from "@/components/SearchProviders";
 import WhitePaper from "@/components/ui/white-paper";
 import { Button } from "@/components/ui";
 import Service from "@/public/images/service.svg";
-import { AVAILABLE_SKILL, ProviderAction, ProviderState, initialState, MIN_RADIUS, MAX_RADIUS } from './constants';
+import {
+  AVAILABLE_SKILL,
+  ProviderAction,
+  ProviderState,
+  initialState,
+  MIN_RADIUS,
+  MAX_RADIUS,
+  ValidationErrors,
+} from "./constants";
 
 function reducer(state: ProviderState, action: ProviderAction): ProviderState {
   switch (action.type) {
@@ -107,7 +117,7 @@ const ProviderSetup = () => {
   const { mutate: mutateEdit } = useProvidersControllerUpdateMyDetails();
   // const { mutate: mutateSuggestions, data: locationData } =
   //   useProvidersControllerGetSuggestions();
-  useAuthBasedRedirection();
+  useProviderRoute();
   const router = useRouter();
 
   // useEffect(() => {
@@ -118,6 +128,7 @@ const ProviderSetup = () => {
 
   useEffect(() => {
     if (appState?.user?.role === CreateUserDtoRole.CONSUMER) {
+      console.log("hiiiiiiiii");
       router.replace("/");
     }
   }, [appState?.user, router]);

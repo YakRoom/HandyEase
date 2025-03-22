@@ -27,7 +27,7 @@ export function useAppInit(state: any, dispatch: any) {
       refetchOnMount: false,
     },
   });
-  
+
   useEffect(() => {
     if (hasToken && data) {
       dispatch({
@@ -37,11 +37,10 @@ export function useAppInit(state: any, dispatch: any) {
       setInitApisLoading(false);
     }
   }, [hasToken, data]);
-  
+
   useEffect(() => {
     const { user } = state;
     if (state?.user) {
-      
       if (user?.role === CreateUserDtoRole.CONSUMER && user?.policyAccepted) {
         dispatch({
           type: "SET_ONBOARDED",
@@ -50,14 +49,11 @@ export function useAppInit(state: any, dispatch: any) {
       }
     }
   }, [state.user]);
-  
+
   useEffect(() => {
     const isDetailsFilled = !!Object.values(providerDetails || {}).length;
     if (state?.user && providerDetails) {
-      if (
-        state?.user?.role === CreateUserDtoRole.PROVIDER &&
-        isDetailsFilled
-      ) {
+      if (state?.user?.role === CreateUserDtoRole.PROVIDER && isDetailsFilled) {
         dispatch({
           type: "SET_ONBOARDED",
           payload: true,

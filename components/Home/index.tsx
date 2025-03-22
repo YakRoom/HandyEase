@@ -1,7 +1,10 @@
 "use client";
 import Image from "next/image";
 import { FC, useEffect, useState } from "react";
-import { useProvidersControllerSearchProviders } from "@/apis/generated";
+import {
+  useProvidersControllerGetServiceTypes,
+  useProvidersControllerSearchProviders,
+} from "@/apis/generated";
 import { Button } from "../ui/button";
 import GreyPaper from "../ui/grey-paper";
 import WorkerDescriptionCard from "../WorkerDescriptionCard";
@@ -9,33 +12,35 @@ import thumbnail from "@/public/images/thumbnail.png";
 import SearchProviders from "../SearchProviders";
 import Services from "../Services";
 import { useAppContext } from "@/context/AppContext";
+import SelectorCard from "../SelectorCard";
+import HandymenIcon from "@/public/images/handymen-icon";
+import CleanerIcon from "@/public/images/cleaner-icon";
+
+const serviceTypes = [
+  {
+    name: "Cleaner",
+    description: "Choose from various Service done",
+    img: <CleanerIcon />,
+    label: "Cleaning",
+    id: "CLEANER",
+  },
+  {
+    name: "Handyman",
+    description: "Deep Clean, Move ot cleaning, Win",
+    img: <HandymenIcon />,
+    label: "Handymen",
+    id: "HANDYMEN",
+  },
+];
 
 const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
-  // const [,setServicesArray] = useState([
-  //   {
-  //     checked: "",
-  //     name: "Cleaner",
-  //     description: "Choose from various ser Service done",
-  //     img: "",
-  //     type: "cleaning",
-  //   },
-  //   {
-  //     checked: "",
-  //     name: "Handyman",
-  //     description: "Deep Clean, Move ot cleaning, Win",
-  //     img: "",
-  //     type: "Service",
-  //   },
-  // ]);
-  // const handleSelect = (index) => {
-  //   setServicesArray((prevServices) =>
-  //     prevServices.map((service, i) => ({
-  //       ...service,
-  //       checked: i === index, // Only the clicked item will be checked, others will be unchecked
-  //     }))
-  //   );
-  // };
+  const [selectedCategory, setSelectedCategory] = useState(serviceTypes[0]?.id);
+  const [serviceType, setSelectedServiceType] = useState("");
+  const handleSelect = (value) => {
+    setSelectedServiceType(value);
+  };
+  const { data: serviceData } = useProvidersControllerGetServiceTypes();
 
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
@@ -52,6 +57,17 @@ const Home: FC = () => {
       );
     }
   }, [mutate, state?.searchedLocation?.placeId]);
+
+  useEffect(() => {
+    if (serviceData) {
+      console.log(
+        serviceData,
+        selectedCategory,
+        serviceData?.[selectedCategory]
+      );
+      setSelectedServiceType(serviceData?.[selectedCategory]?.[0]?.key);
+    }
+  }, [serviceData, selectedCategory]);
 
   const providers = data?.providers ?? [];
   const providersList = viewAll ? providers : providers.slice(0, 2);
@@ -80,52 +96,39 @@ const Home: FC = () => {
                 })
               }
             />
-            {/* <div className="select_service">
+            <div className="w-full text-[16px]  leading-[100%] font-bold">
               <p>Select the service type</p>
-              <div className="choose_service">
-                {servicesArray.map((service, index) => (
-                  <div
-                    key={index}
-                    className="service_box"
-                    style={{
-                      backgroundColor: service.checked ? "#FFFFFF" : "#D9D9D9",
-                    }}
-                  >
-                    <span
-                      className="checkbox"
-                      style={{
-                        border: service.checked
-                          ? "5px solid #00a699"
-                          : "5px solid #ffffff",
-                      }}
-                      onClick={() => handleSelect(index)}
-                    />
-                    <p className="description">{service.description} </p>
-                    <div className="serviceAndImg">
-                      <p
-                        className="service_name"
-                        style={{
-                          color: service.checked ? "#00A699" : "#151515CC",
-                        }}
-                      >
-                        {service.name}
-                      </p>
-                      <img src="a" alt="img" />
-                    </div>
-                    <button className="select_type_btn">
-                      {service.type} type <span></span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div> */}
+            </div>
+            <div className="flex w-full items-center justify-center gap-2">
+              {serviceTypes.map((service) => {
+                return (
+                  <SelectorCard
+                    key={service?.id}
+                    handleSelectCategory={(category) =>
+                      setSelectedCategory(category)
+                    }
+                    dropwdownOptions={serviceData?.[service?.id] || []}
+                    handleSelect={handleSelect}
+                    serviceType={serviceType}
+                    setSelectedServiceType={setSelectedServiceType}
+                    checked={selectedCategory === service?.id}
+                    {...service}
+                  />
+                );
+              })}
+            </div>
             <div className="search_button w-full">
               <button
                 className="w-full"
                 onClick={() => {
                   setViewAll(true);
                   mutate(
-                    { data: { locationId: state?.searchedLocation?.placeId } },
+                    {
+                      data: {
+                        locationId: state?.searchedLocation?.placeId,
+                        serviceTypes: [serviceType],
+                      },
+                    },
                     {
                       onError: (err) => {
                         console.error("Provider search failed:", err);

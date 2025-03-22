@@ -22,12 +22,14 @@ const ProviderDetails = ({ params }) => {
   }
 
   return (
-    <GreyPaper>
-      <Profile provider={data} />
-      <ConnectSection providerData={data} />
-      <Reviews reviews={data?.user?.reviewsReceived} />
+    <>
+      <GreyPaper>
+        <Profile provider={data} />
+        <ConnectSection providerData={data} />
+        <Reviews reviews={data?.user?.reviewsReceived} />
+      </GreyPaper>
       <Services />
-    </GreyPaper>
+    </>
   );
 };
 

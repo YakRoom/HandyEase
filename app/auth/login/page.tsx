@@ -1,34 +1,57 @@
 "use client";
-import { useAuthControllerSignIn } from "@/apis/generated";
-// import { useAuthControllerSignIn } from "@/apis/generated";
+import {
+  useAuthControllerSignIn,
+  useProvidersControllerGetMyProviderDetails,
+} from "@/apis/generated";
 import { Button, Input } from "@/components/ui";
 import WhitePaper from "@/components/ui/white-paper";
 import { useAppContext } from "@/context/AppContext";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+import { usePublicRoute } from "@/hooks/useAuthBasedRedirection";
 import { useEffect, useState } from "react";
 import { TOKEN_KEY } from "./constants";
-import get from 'lodash/get'
+import get from "lodash/get";
+import { useRouter } from "next/navigation";
+import { CreateUserDtoRole } from "@/apis/generated.schemas";
 const ISSERVER = typeof window === "undefined";
 
-
 export default function LoginPage() {
-  useAuthBasedRedirection();
+  usePublicRoute();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-
+  const { state } = useAppContext();
+  const router = useRouter();
   const { mutate: signIn, data, isPending } = useAuthControllerSignIn();
   const { dispatch } = useAppContext();
+  const { isPending: isProviderPending } =
+    useProvidersControllerGetMyProviderDetails({
+      query: {
+        enabled:
+          state?.user?.role === CreateUserDtoRole.PROVIDER &&
+          state?.user?.policyAccepted,
+        refetchOnMount: false,
+      },
+      onSuccess: (data) => {
+        const isProviderDetailsEmpty = Object.values(data || {}).length === 0;
+        if (isProviderDetailsEmpty) {
+          router.replace("/auth/provider-details");
+        }
+      },
+    });
 
   useEffect(() => {
     if (data) {
-      if (!ISSERVER && localStorage) localStorage.setItem(TOKEN_KEY, get(data , 'access_token'));
+      if (!ISSERVER && localStorage)
+        localStorage.setItem(TOKEN_KEY, get(data, "access_token"));
       dispatch({
         type: "SET_USER",
-        payload: get(data , 'user'),
+        payload: get(data, "user"),
       });
+      if (!data?.user?.policyAccepted) {
+        router.replace("/auth/sign-up");
+      }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, router]);
 
   const validateForm = () => {
     let isValid = true;

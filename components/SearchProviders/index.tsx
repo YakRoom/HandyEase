@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./style.css";
 import { useProvidersControllerGetSuggestions } from "@/apis/generated";
 import { Input } from "../ui";
@@ -10,6 +10,18 @@ const SearchProviders = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [search, setSearch] = useState(searchedLocation || "");
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!search) return; // Avoid calling API on empty search
@@ -38,7 +50,7 @@ const SearchProviders = (props) => {
   };
 
   return (
-    <div className="search_input w-full">
+    <div className="search_input w-full" ref={searchRef}>
       <Input
         value={search}
         className="w-full"
@@ -65,24 +77,36 @@ const SearchProviders = (props) => {
             padding: "0",
             margin: "0",
             zIndex: 10000,
-            display: data?.length <= 0 && "none",
+            display: search?.length <= 0 && "none",
           }}
         >
           {data ? (
-            data.map((option, index) => (
+            data?.length ? (
+              data.map((option, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSelectSuggestion(option)}
+                  style={{
+                    padding: "10px",
+                    cursor: "pointer",
+                    backgroundColor:
+                      selectedIndex === index ? "#f0f0f0" : "white",
+                  }}
+                >
+                  {option.description}
+                </li>
+              ))
+            ) : (
               <li
-                key={index}
-                onClick={() => handleSelectSuggestion(option)}
                 style={{
                   padding: "10px",
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedIndex === index ? "#f0f0f0" : "white",
+                  textAlign: "center",
+                  color: "#666",
                 }}
               >
-                {option.description}
+                No results
               </li>
-            ))
+            )
           ) : (
             <li
               style={{

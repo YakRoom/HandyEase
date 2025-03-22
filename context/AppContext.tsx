@@ -1,4 +1,5 @@
 "use client";
+import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import { useAppInit } from "@/hooks/useAppInit";
 import { useErrorObserver } from "@/hooks/useErrorObserver";
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
@@ -8,6 +9,9 @@ export interface AppState {
   user: {
     id?: string;
     name?: string;
+    firstName?: string;
+    policyAccepted?: boolean;
+    role?: CreateUserDtoRole;
   } | null;
   // Add other state properties here
   searchedLocation: {
@@ -20,7 +24,7 @@ export interface AppState {
 // Define types for actions
 type AppAction =
   | { type: "SET_USER"; payload: AppState["user"] }
-  | { type: "SET_SEARCHED_LOCATION"; payload: AppState["searchedLocation"] } 
+  | { type: "SET_SEARCHED_LOCATION"; payload: AppState["searchedLocation"] }
   | { type: "SET_ONBOARDED"; payload: AppState["isOnboarded"] };
 
 // Define the context type
