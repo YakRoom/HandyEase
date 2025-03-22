@@ -7,10 +7,10 @@ import Reviews from "../provider-details/components/Reviews";
 import { useProvidersControllerGetMyProviderDetails } from "@/apis/generated";
 import { useAppContext } from "@/context/AppContext";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
-import useAuthBasedRedirection from "@/hooks/useAuthBasedRedirection";
+import { useProtectedRoute } from "@/hooks/routeHooks";
 
 const ViewProfile = () => {
-  useAuthBasedRedirection();
+  useProtectedRoute();
   const { state } = useAppContext();
   const { data: providerDetails } = useProvidersControllerGetMyProviderDetails({
     query: {

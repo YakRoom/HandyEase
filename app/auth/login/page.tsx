@@ -7,7 +7,7 @@ import {
 import { Button, Input } from "@/components/ui";
 import WhitePaper from "@/components/ui/white-paper";
 import { useAppContext } from "@/context/AppContext";
-import { usePublicRoute } from "@/hooks/useAuthBasedRedirection";
+import { usePublicRoute } from "@/hooks/routeHooks";
 import { useEffect, useState } from "react";
 import { TOKEN_KEY } from "./constants";
 import get from "lodash/get";
