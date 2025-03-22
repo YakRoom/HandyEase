@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 export function useAppInit(state: any, dispatch: any) {
   const hasToken =
     typeof window !== "undefined" ? !!localStorage.getItem("token") : false;
-  const router = useRouter();
   const [initApisLoading, setInitApisLoading] = useState(hasToken);
   const { data } = useUsersControllerGetUserInfo({
     query: {
@@ -28,8 +27,7 @@ export function useAppInit(state: any, dispatch: any) {
       refetchOnMount: false,
     },
   });
-  const isDetailsFilled = !!Object.values(providerDetails || {}).length;
-
+  
   useEffect(() => {
     if (hasToken && data) {
       dispatch({
@@ -39,27 +37,31 @@ export function useAppInit(state: any, dispatch: any) {
       setInitApisLoading(false);
     }
   }, [hasToken, data]);
-
+  
   useEffect(() => {
+    const { user } = state;
     if (state?.user) {
-      if (state?.user?.otp) {
-        router.replace("/auth/otp-verification");
-      } else if (!state?.user?.firstName) {
-        router.replace("/auth/add-name");
-      } else if (!state?.user?.policyAccepted) {
-        router.replace("/auth/policy");
+      
+      if (user?.role === CreateUserDtoRole.CONSUMER && user?.policyAccepted) {
+        dispatch({
+          type: "SET_ONBOARDED",
+          payload: true,
+        });
       }
     }
   }, [state.user]);
-
+  
   useEffect(() => {
+    const isDetailsFilled = !!Object.values(providerDetails || {}).length;
     if (state?.user && providerDetails) {
       if (
         state?.user?.role === CreateUserDtoRole.PROVIDER &&
-        !isDetailsFilled &&
-        state?.user?.policyAccepted
+        isDetailsFilled
       ) {
-        router.replace("/auth/provider-details");
+        dispatch({
+          type: "SET_ONBOARDED",
+          payload: true,
+        });
       }
     }
   }, [state.user, providerDetails]);

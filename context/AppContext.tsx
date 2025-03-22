@@ -14,12 +14,14 @@ export interface AppState {
     description: string;
     placeId: string;
   } | null;
+  isOnboarded: boolean;
 }
 
 // Define types for actions
 type AppAction =
   | { type: "SET_USER"; payload: AppState["user"] }
-  | { type: "SET_SEARCHED_LOCATION"; payload: AppState["searchedLocation"] };
+  | { type: "SET_SEARCHED_LOCATION"; payload: AppState["searchedLocation"] } 
+  | { type: "SET_ONBOARDED"; payload: AppState["isOnboarded"] };
 
 // Define the context type
 interface AppContextType {
@@ -31,6 +33,7 @@ interface AppContextType {
 const initialState: AppState = {
   user: null,
   searchedLocation: null,
+  isOnboarded: false,
 };
 
 // Create the reducer
@@ -45,6 +48,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         searchedLocation: action.payload,
+      };
+    case "SET_ONBOARDED":
+      return {
+        ...state,
+        isOnboarded: action.payload,
       };
     default:
       return state;
