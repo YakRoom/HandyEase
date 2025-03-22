@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { memo, useEffect, useState } from "react";
 
 const TermsConditions: FC = () => {
-  useAuthBasedRedirection();
   const router = useRouter();
   const { mutate, data } = useUsersControllerUpdateUserInfo();
   const { dispatch, state } = useAppContext();
