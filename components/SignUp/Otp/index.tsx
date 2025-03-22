@@ -1,10 +1,10 @@
 import { FC, memo, useEffect, useState } from "react";
 import {
-  // Input,
+  Input,
   Button,
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
+  // InputOTP,
+  // InputOTPGroup,
+  // InputOTPSlot,
   // InputOTPSeparator,
 } from "@/components/ui";
 import { useAppContext } from "@/context/AppContext";
@@ -27,21 +27,20 @@ const OtpStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = (
   }, [data, dispatch]);
   // console.log(data);
 
-  const otpSlotClasses = "bg-[#F4F4F4] w-[45] h-[45] rounded-[6px]";
+  // const otpSlotClasses = "bg-[#F4F4F4] w-[45] h-[45] rounded-[6px]";
   return (
     <div className="flex flex-col gap-4 bg-white rounded-xl p-4">
       <div className="text-2xl font-bold">
         Enter the 4-digit code sent to you at:
       </div>
       <div className="text-lg font-bold">{state?.user?.email}</div>
-      <InputOTP maxLength={4} onChange={(e) => setOtp(parseInt(e, 10))}>
-        <InputOTPGroup className="flex gap-6">
-          <InputOTPSlot className={otpSlotClasses} index={0} />
-          <InputOTPSlot className={otpSlotClasses} index={1} />
-          <InputOTPSlot className={otpSlotClasses} index={2} />
-          <InputOTPSlot className={otpSlotClasses} index={3} />
-        </InputOTPGroup>
-      </InputOTP>
+      <Input
+              placeholder="OTP"
+              type="number"
+              className="bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
+              value={otp}
+              onChange={(e) => setOtp(parseInt(e?.target?.value, 10))}
+            />
 
       <p className="text-[16px] font-medium text-[#151515CC]">
         Tip: Be sure to check your inbox and spam folders
