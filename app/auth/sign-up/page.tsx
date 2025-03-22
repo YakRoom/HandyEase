@@ -29,6 +29,7 @@ export default function Credentials() {
   );
   // Helper functions to determine signup flow steps
   const determineSignupStep = (user: User | null | undefined) => {
+    if (!user) return null;
     if (user?.otp) return 2;
     if (!user?.firstName) return 3;
     if (!user?.policyAccepted) return 4;
