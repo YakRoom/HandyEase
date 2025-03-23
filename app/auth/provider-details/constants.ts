@@ -10,6 +10,7 @@ export interface ProviderState {
   skills: string[];
   locationName: string;
   locationId: string;
+  isNegotiable: boolean;
 }
 
 export interface ValidationErrors {
@@ -27,6 +28,7 @@ export type ProviderAction =
   
   | { type: "BULK_UPDATE"; action: any } // eslint-disable-line  @typescript-eslint/no-explicit-any 
   | { type: "SET_LOCATION"; locationId: string; locationName: string };
+
 export const DEFAULT_RADIUS = 5;
 export const MIN_RADIUS = 1;
 export const MAX_RADIUS = 50;
@@ -55,4 +57,5 @@ export const initialState: ProviderState = {
   skills: [],
   locationName: "",
   locationId: "",
+  isNegotiable: false,
 };

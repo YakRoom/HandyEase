@@ -1,21 +1,28 @@
 "use client";
-import {
-  useProvidersControllerCreateProvider,
-  useProvidersControllerGetMyProviderDetails,
-  // useProvidersControllerGetSuggestions,
-  useProvidersControllerUpdateMyDetails,
-} from "@/apis/generated";
-import { CreateUserDtoRole } from "@/apis/generated.schemas";
-import { useAppContext } from "@/context/AppContext";
-import { useProviderRoute } from "@/hooks/routeHooks";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useReducer, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "@/context/AppContext";
+import { Button } from "@/components/ui";
 import { FormField, Input, TextArea } from "@/components/ui/form-field";
 import SearchProviders from "@/components/SearchProviders";
 import WhitePaper from "@/components/ui/white-paper";
-import { Button } from "@/components/ui";
+import {
+  Camera,
+  MapPin,
+  Phone,
+  Upload,
+  Clock,
+  CheckCircle,
+  // Pound,
+} from "lucide-react";
 import Service from "@/public/images/service.svg";
+import {
+  useProvidersControllerCreateProvider,
+  useProvidersControllerGetMyProviderDetails,
+  useProvidersControllerUpdateMyDetails,
+} from "@/apis/generated";
+import { CreateUserDtoRole } from "@/apis/generated.schemas";
 import {
   AVAILABLE_SKILL,
   ProviderAction,
@@ -25,6 +32,8 @@ import {
   MAX_RADIUS,
   ValidationErrors,
 } from "./constants";
+import { useProviderRoute } from "@/hooks/routeHooks";
+import React, { useEffect, useReducer, useState } from "react";
 
 function reducer(state: ProviderState, action: ProviderAction): ProviderState {
   switch (action.type) {
@@ -59,8 +68,11 @@ function reducer(state: ProviderState, action: ProviderAction): ProviderState {
   }
 }
 
-const ProviderSetup = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const ProviderSetup: FC = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    isNegotiable: false,
+  });
   const [errors, setErrors] = useState<ValidationErrors>({});
   const { mutate } = useProvidersControllerCreateProvider();
   const { state: appState, dispatch: appDispatch } = useAppContext();
@@ -100,12 +112,13 @@ const ProviderSetup = () => {
           about: providerDetails.bio || "",
           payRate: providerDetails.hourlyRate || null,
           experience: providerDetails.experienceYears || null,
-          radius: providerDetails.radius || DEFAULT_RADIUS,
+          radius: providerDetails.radius || 10,
           phone: providerDetails.phoneNumber || "",
           allowCalls: providerDetails.showPhoneNumber || false,
           skills: providerDetails.serviceTypes || [],
           locationName: providerDetails.locationName || "",
           locationId: providerDetails.locationId || "",
+          isNegotiable: providerDetails.isNegotiable || false,
         },
       });
     }
@@ -113,16 +126,8 @@ const ProviderSetup = () => {
 
   const isEditMode = Object.values(providerDetails || {}).length > 0;
   const { mutate: mutateEdit } = useProvidersControllerUpdateMyDetails();
-  // const { mutate: mutateSuggestions, data: locationData } =
-  //   useProvidersControllerGetSuggestions();
   useProviderRoute();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   if (state.locationName.trim()) {
-  //     mutateSuggestions({ data: { place: state.locationName } });
-  //   }
-  // }, [state.locationName, mutateSuggestions]);
 
   useEffect(() => {
     if (appState?.user?.role === CreateUserDtoRole.CONSUMER) {
@@ -183,11 +188,13 @@ const ProviderSetup = () => {
       phoneNumber: state.phone,
       showPhoneNumber: state.allowCalls,
       resume: state.resume,
+      isNegotiable: state.isNegotiable,
     };
 
     try {
       if (isEditMode) {
         mutateEdit({ data: providerData });
+        router.push("/view-profile");
       } else {
         mutate({ data: providerData });
       }
@@ -213,7 +220,10 @@ const ProviderSetup = () => {
     });
   };
 
-  const handleFieldChange = (field: keyof ProviderState, value: FieldValue) => {
+  const handleFieldChange = (
+    field: keyof ProviderState,
+    value: string | number | File | null | boolean
+  ) => {
     dispatch({ type: "SET_FIELD", field, value });
     clearError(field);
   };
@@ -248,203 +258,308 @@ const ProviderSetup = () => {
   return (
     <>
       {renderServiceCards ? (
-        <WhitePaper>
-          <h2 className="text-lg font-semibold text-gray-800">
-            What do you want to join as
-          </h2>
+        <div className="max-w-2xl mx-auto">
+          <WhitePaper>
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-neutral-900">
+                  What service do you provide?
+                </h2>
+                <p className="text-neutral-600 mt-1">
+                  Choose your primary service category to get started
+                </p>
+              </div>
 
-          <div>
-            {Object.keys(AVAILABLE_SKILL).map((skill) => {
-              return (
-                <div
-                  className="flex flex-row p-6 mb-4 bg-gray-50 rounded-2xl gap-4 "
-                  key={skill}
-                  onClick={() => handleSelectSkill(skill)}
-                >
-                  <div className="flex flex-col gap-4">
-                    <span className="font-bold">{skill}</span>
-                    <div>Deep Clean, Move ot cleaning, Window Cleaning </div>
-                    <Button
-                      className="bg-white text-black font-bold w-max rounded-lg"
-                      // size="lg"
-                    >
-                      Select
-                    </Button>
-                  </div>
-                  <Image
-                    src={Service}
-                    alt="thumbnail"
-                    height={"100"}
-                    width={"100"}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </WhitePaper>
-      ) : (
-        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Let&apos;s get to know you more
-          </h2>
-
-          <div className="flex flex-col items-center mt-4">
-            <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center relative">
-              {state.profilePic ? (
-                <Image
-                  src={state.profilePic}
-                  alt="Profile"
-                  fill
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                "📷"
-              )}
-            </div>
-            <button className="text-sm text-gray-600 mt-2 underline">
-              Add a picture
-            </button>
-          </div>
-
-          <div className="space-y-4 mt-6">
-            <FormField label="Tell us about yourself" error={errors.about}>
-              <TextArea
-                placeholder="Describe your experience and expertise..."
-                value={state.about}
-                onChange={(e) => handleFieldChange("about", e.target.value)}
-                error={errors.about}
-              />
-            </FormField>
-
-            <FormField label="What are your expertise" error={errors.skills}>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <span
-                    key={skill.key}
-                    className={`px-3 py-1 text-xs rounded-full cursor-pointer ${
-                      state.skills.includes(skill.key)
-                        ? "bg-black text-white"
-                        : "bg-gray-200 text-gray-700"
-                    }`}
-                    onClick={() => handleSkillToggle(skill.key)}
+              <div className="grid gap-4">
+                {Object.keys(AVAILABLE_SKILL).map((skill) => (
+                  <button
+                    key={skill}
+                    onClick={() => handleSelectSkill(skill)}
+                    className="group p-6 bg-neutral-50 hover:bg-neutral-100 rounded-xl transition-colors"
                   >
-                    {skill.label}
-                  </span>
+                    <div className="flex items-start gap-6">
+                      <div className="flex-1 text-left space-y-3">
+                        <h3 className="text-lg font-medium text-neutral-900 group-hover:text-primary transition-colors">
+                          {skill}
+                        </h3>
+                        <p className="text-sm text-neutral-600">
+                          Deep Clean, Move out cleaning, Window Cleaning
+                        </p>
+                        <Button variant="secondary" size="sm" className="mt-2">
+                          Select <span className="ml-2">→</span>
+                        </Button>
+                      </div>
+                      <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-white">
+                        <Image
+                          src={Service}
+                          alt={`${skill} service`}
+                          className="object-cover"
+                          fill
+                        />
+                      </div>
+                    </div>
+                  </button>
                 ))}
               </div>
-            </FormField>
-
-            <FormField label="Basic Pay Rate" error={errors.payRate}>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="number"
-                  className="w-16"
-                  placeholder="£"
-                  min={1}
-                  value={state.payRate || ""}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      "payRate",
-                      e.target.value ? Number(e.target.value) : null
-                    )
-                  }
-                  error={errors.payRate}
-                />
-                <span className="text-gray-700">/ hr</span>
-              </div>
-            </FormField>
-
-            <FormField label="Experience" error={errors.experience}>
-              <Input
-                type="number"
-                placeholder="Years of experience"
-                min={0}
-                value={state.experience || ""}
-                onChange={(e) =>
-                  handleFieldChange(
-                    "experience",
-                    e.target.value ? Number(e.target.value) : null
-                  )
-                }
-                error={errors.experience}
-              />
-            </FormField>
-
-            <FormField label="Preferred Location" error={errors.postcode}>
-              <SearchProviders
-                onSelect={(option) =>
-                  dispatch({
-                    type: "SET_LOCATION",
-                    locationId: option.place_id,
-                    locationName: option.description,
-                  })
-                }
-              />
-            </FormField>
-
-            <div className="mt-2">
-              <input
-                type="range"
-                min={MIN_RADIUS}
-                max={MAX_RADIUS}
-                value={state.radius}
-                onChange={(e) =>
-                  dispatch({
-                    type: "SET_FIELD",
-                    field: "radius",
-                    value: Number(e.target.value),
-                  })
-                }
-                className="w-3/4"
-              />
-              <span className="text-gray-700">{state.radius} miles</span>
             </div>
-
-            <FormField label="Phone Number" error={errors.phone}>
-              <Input
-                type="tel"
-                placeholder="+44"
-                value={state.phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                error={errors.phone}
-              />
-            </FormField>
-
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-sm text-gray-700">Allow direct calls</span>
-              <input
-                type="checkbox"
-                checked={state.allowCalls}
-                onChange={() => dispatch({ type: "TOGGLE_CALLS" })}
-                className="h-5 w-5"
-              />
-            </div>
-
-            <FormField label="Resume or Certifications">
-              <input
-                type="file"
-                className="mt-2 text-sm"
-                accept=".pdf,.doc,.docx"
-                onChange={(e) =>
-                  e.target.files?.[0] &&
-                  handleFieldChange("resume", e.target.files[0])
-                }
-              />
-            </FormField>
-
-            {errors.submit && (
-              <div className="mt-4">
-                <p className="text-sm text-red-500">{errors.submit}</p>
+          </WhitePaper>
+        </div>
+      ) : (
+        <div className="max-w-xl mx-auto">
+          <WhitePaper>
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl font-semibold text-neutral-900">
+                  Complete Your Profile
+                </h2>
+                <p className="text-neutral-600 mt-1">
+                  Help customers get to know you better
+                </p>
               </div>
-            )}
 
-            <button
-              className="w-full bg-black text-white py-2 rounded-md mt-6 hover:bg-gray-800 transition-colors"
-              onClick={handleSubmit}
-            >
-              {isEditMode ? "Save Changes" : "Next"} →
-            </button>
-          </div>
+              {/* Profile Picture */}
+              <div className="flex flex-col items-center">
+                <div className="relative group">
+                  <div className="w-24 h-24 rounded-full overflow-hidden bg-neutral-100 ring-4 ring-neutral-50">
+                    {state.profilePic ? (
+                      <Image
+                        src={state.profilePic}
+                        alt="Profile picture"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-neutral-400">
+                        <Camera className="w-8 h-8" />
+                      </div>
+                    )}
+                  </div>
+                  <button className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 rounded-full transition-opacity">
+                    Change Photo
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {/* About */}
+                <FormField label="Tell us about yourself" error={errors.about}>
+                  <TextArea
+                    placeholder="Share your experience, expertise, and what makes you unique..."
+                    value={state.about}
+                    onChange={(e) => handleFieldChange("about", e.target.value)}
+                    error={errors.about}
+                    className="min-h-[120px]"
+                  />
+                </FormField>
+
+                {/* Skills */}
+                <FormField label="Your expertise" error={errors.skills}>
+                  <div className="flex flex-wrap gap-2">
+                    {skills.map((skill) => (
+                      <button
+                        key={skill.key}
+                        onClick={() => handleSkillToggle(skill.key)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors ${
+                          state.skills.includes(skill.key)
+                            ? "bg-primary text-white"
+                            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                        }`}
+                      >
+                        {state.skills.includes(skill.key) && (
+                          <CheckCircle className="w-4 h-4" />
+                        )}
+                        {skill.label}
+                      </button>
+                    ))}
+                  </div>
+                </FormField>
+
+                {/* Rate and Experience */}
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <FormField label="Hourly Rate" error={errors.payRate}>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
+                        £
+                      </span>
+                      <Input
+                        type="number"
+                        className="pl-9"
+                        value={state.payRate || ""}
+                        onChange={(e) =>
+                          handleFieldChange("payRate", Number(e.target.value))
+                        }
+                        placeholder="Enter your hourly rate"
+                        aria-label="Hourly rate input"
+                      />
+                    </div>
+                  </FormField>
+
+                  <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      {/* <Pound className="w-5 h-5 text-neutral-500" /> */}
+                      <span className="text-sm font-medium text-neutral-700">
+                        Rate is negotiable
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={state.isNegotiable}
+                        onChange={(e) =>
+                          handleFieldChange("isNegotiable", e.target.checked)
+                        }
+                        aria-label="Toggle rate negotiability"
+                      />
+                      <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  <FormField
+                    label="Years of Experience"
+                    error={errors.experience}
+                  >
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <Input
+                        type="number"
+                        className="pl-9"
+                        placeholder="0"
+                        min={0}
+                        value={state.experience || ""}
+                        onChange={(e) =>
+                          handleFieldChange(
+                            "experience",
+                            e.target.value ? Number(e.target.value) : null
+                          )
+                        }
+                        error={errors.experience}
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
+                        years
+                      </span>
+                    </div>
+                  </FormField>
+                </div>
+
+                {/* Location */}
+                <div className="space-y-4">
+                  <FormField label="Service Area" error={errors.postcode}>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <SearchProviders
+                        onSelect={(option) =>
+                          dispatch({
+                            type: "SET_LOCATION",
+                            locationId: option.place_id,
+                            locationName: option.description,
+                          })
+                        }
+                      />
+                    </div>
+                  </FormField>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-neutral-700">
+                        Service radius
+                      </span>
+                      <span className="text-sm text-neutral-600">
+                        {state.radius} miles
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={MIN_RADIUS}
+                      max={MAX_RADIUS}
+                      value={state.radius}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "SET_FIELD",
+                          field: "radius",
+                          value: Number(e.target.value),
+                        })
+                      }
+                      className="w-full h-2 bg-neutral-200 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
+                    />
+                  </div>
+                </div>
+
+                {/* Contact */}
+                <FormField label="Phone Number" error={errors.phone}>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                    <Input
+                      type="tel"
+                      className="pl-9"
+                      placeholder="+44"
+                      value={state.phone}
+                      onChange={(e) => handlePhoneChange(e.target.value)}
+                      error={errors.phone}
+                    />
+                  </div>
+                </FormField>
+
+                <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-5 h-5 text-neutral-500" />
+                    <span className="text-sm font-medium text-neutral-700">
+                      Allow direct calls
+                    </span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={state.allowCalls}
+                      onChange={() => dispatch({ type: "TOGGLE_CALLS" })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
+                </div>
+
+                {/* Documents */}
+                <FormField label="Resume or Certifications">
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      className="hidden"
+                      accept=".pdf,.doc,.docx"
+                      onChange={(e) =>
+                        e.target.files?.[0] &&
+                        handleFieldChange("resume", e.target.files[0])
+                      }
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="flex items-center gap-2 px-4 py-2 border border-neutral-200 rounded-lg cursor-pointer hover:bg-neutral-50 transition-colors"
+                    >
+                      <Upload className="w-4 h-4 text-neutral-500" />
+                      <span className="text-sm text-neutral-600">
+                        {state.resume ? state.resume.name : "Upload documents"}
+                      </span>
+                    </label>
+                  </div>
+                </FormField>
+
+                {errors.submit && (
+                  <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg">
+                    <p className="text-sm text-rose-600">{errors.submit}</p>
+                  </div>
+                )}
+
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={handleSubmit}
+                >
+                  {isEditMode ? "Save Changes" : "Complete Profile"}
+                  <span className="ml-2">→</span>
+                </Button>
+              </div>
+            </div>
+          </WhitePaper>
         </div>
       )}
     </>

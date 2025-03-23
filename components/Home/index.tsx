@@ -1,32 +1,42 @@
 "use client";
-import Image from "next/image";
+
 import { FC, useEffect, useState } from "react";
+import Image from "next/image";
 import {
   useProvidersControllerGetServiceTypes,
   useProvidersControllerSearchProviders,
 } from "@/apis/generated";
-import { Button } from "../ui/button";
-import GreyPaper from "../ui/grey-paper";
-import WorkerDescriptionCard from "../WorkerDescriptionCard";
-import thumbnail from "@/public/images/thumbnail.png";
-import SearchProviders from "../SearchProviders";
-import Services from "../Services";
+import { Button } from "@/components/ui";
+import GreyPaper from "@/components/ui/grey-paper";
+import WorkerDescriptionCard from "@/components/WorkerDescriptionCard";
+import SearchProviders from "@/components/SearchProviders";
+import Services from "@/components/Services";
 import { useAppContext } from "@/context/AppContext";
-import SelectorCard from "../SelectorCard";
+import SelectorCard from "@/components/SelectorCard";
 import HandymenIcon from "@/public/images/handymen-icon";
 import CleanerIcon from "@/public/images/cleaner-icon";
+import thumbnail from "@/public/images/thumbnail.png";
+import { Search, Loader2 } from "lucide-react";
 
-const serviceTypes = [
+interface ServiceType {
+  name: string;
+  description: string;
+  img: JSX.Element;
+  label: string;
+  id: "CLEANER" | "HANDYMEN";
+}
+
+const SERVICE_TYPES: ServiceType[] = [
   {
     name: "Cleaner",
-    description: "Choose from various Service done",
+    description: "Professional cleaning services for your home",
     img: <CleanerIcon />,
     label: "Cleaning",
     id: "CLEANER",
   },
   {
     name: "Handyman",
-    description: "Deep Clean, Move ot cleaning, Win",
+    description: "Expert repairs and maintenance services",
     img: <HandymenIcon />,
     label: "Handymen",
     id: "HANDYMEN",
@@ -35,20 +45,16 @@ const serviceTypes = [
 
 const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
-  const [selectedCategory, setSelectedCategory] = useState(serviceTypes[0]?.id);
+  const [selectedCategory, setSelectedCategory] = useState<ServiceType["id"]>(SERVICE_TYPES[0].id);
   const [serviceType, setSelectedServiceType] = useState("");
-  const handleSelect = (value) => {
-    setSelectedServiceType(value);
-  };
   const { data: serviceData } = useProvidersControllerGetServiceTypes();
-
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
 
   useEffect(() => {
     if (state?.searchedLocation?.placeId) {
       mutate(
-        { data: { locationId: state?.searchedLocation?.placeId } },
+        { data: { locationId: state.searchedLocation.placeId } },
         {
           onError: (err) => {
             console.error("Provider search failed:", err);
@@ -59,31 +65,46 @@ const Home: FC = () => {
   }, [mutate, state?.searchedLocation?.placeId]);
 
   useEffect(() => {
-    if (serviceData) {
-      console.log(
-        serviceData,
-        selectedCategory,
-        serviceData?.[selectedCategory]
-      );
-      setSelectedServiceType(serviceData?.[selectedCategory]?.[0]?.key);
+    if (serviceData?.[selectedCategory]?.[0]?.key) {
+      setSelectedServiceType(serviceData[selectedCategory][0].key);
     }
   }, [serviceData, selectedCategory]);
+
+  const handleSearch = () => {
+    setViewAll(true);
+    mutate(
+      {
+        data: {
+          locationId: state?.searchedLocation?.placeId,
+          serviceTypes: [serviceType],
+        },
+      },
+      {
+        onError: (err) => {
+          console.error("Provider search failed:", err);
+        },
+      }
+    );
+  };
 
   const providers = data?.providers ?? [];
   const providersList = viewAll ? providers : providers.slice(0, 2);
   const totalProviders = providers.length;
 
   return (
-    <>
-      <GreyPaper>
-        <span className="text-4xl font-bold ma">
-          Get it done with Handymate
-        </span>
-        <div className="text-xl text-gray-600 mt-4">
-          Direct contact, no commission and faster results.
+    <div className="space-y-8">
+      <GreyPaper className="space-y-6">
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight text-neutral-900">
+            Get it done with Handymate
+          </h1>
+          <p className="text-xl text-neutral-600">
+            Direct contact, no commission and faster results.
+          </p>
         </div>
-        <div className="mt-4 flex flex-col gap-6">
-          <div className="rounded-lg border border-gray-300 bg-gray-200/50 flex-col justify-evenly items-center flex gap-6 p-6">
+
+        <div className="space-y-6">
+          <div className="rounded-xl border border-neutral-200 bg-white/50 p-6 space-y-6">
             <SearchProviders
               searchedLocation={state?.searchedLocation?.description}
               onSelect={(option) =>
@@ -96,50 +117,33 @@ const Home: FC = () => {
                 })
               }
             />
-            <div className="w-full text-[16px]  leading-[100%] font-bold">
-              <p>Select the service type</p>
-            </div>
-            <div className="flex w-full items-center justify-center gap-2">
-              {serviceTypes.map((service) => {
-                return (
+
+            <div>
+              <h2 className="text-base font-semibold mb-4">Select the service type</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {SERVICE_TYPES.map((service) => (
                   <SelectorCard
-                    key={service?.id}
-                    handleSelectCategory={(category) =>
-                      setSelectedCategory(category)
-                    }
-                    dropwdownOptions={serviceData?.[service?.id] || []}
-                    handleSelect={handleSelect}
+                    key={service.id}
+                    handleSelectCategory={setSelectedCategory}
+                    dropwdownOptions={serviceData?.[service.id] || []}
+                    handleSelect={setSelectedServiceType}
                     serviceType={serviceType}
                     setSelectedServiceType={setSelectedServiceType}
-                    checked={selectedCategory === service?.id}
+                    checked={selectedCategory === service.id}
                     {...service}
                   />
-                );
-              })}
+                ))}
+              </div>
             </div>
-            <div className="search_button w-full">
-              <button
-                className="w-full"
-                onClick={() => {
-                  setViewAll(true);
-                  mutate(
-                    {
-                      data: {
-                        locationId: state?.searchedLocation?.placeId,
-                        serviceTypes: [serviceType],
-                      },
-                    },
-                    {
-                      onError: (err) => {
-                        console.error("Provider search failed:", err);
-                      },
-                    }
-                  );
-                }}
-              >
-                Search
-              </button>
-            </div>
+
+            <Button
+              onClick={handleSearch}
+              className="w-full h-12 font-medium"
+              disabled={!state?.searchedLocation?.placeId || !serviceType}
+            >
+              <Search className="w-4 h-4 mr-2" />
+              Search Providers
+            </Button>
           </div>
 
           {!viewAll && (
@@ -147,80 +151,78 @@ const Home: FC = () => {
               src={thumbnail}
               alt="Handymate service illustration"
               height={500}
-              className="w-full"
+              className="w-full rounded-xl"
+              priority
             />
           )}
+
           {isPending ? (
-            <div className="text-center p-8 border border-[#D9D9D9] rounded-[10px] bg-white">
-              <div className="text-2xl font-bold text-gray-800">
-                Loading providers...
-              </div>
-              <p className="text-gray-600 mt-3">
-                Please wait while we find service providers in your area
+            <div className="text-center p-8 rounded-xl border border-neutral-200 bg-white space-y-4">
+              <h2 className="text-2xl font-semibold text-neutral-900">
+                Finding providers...
+              </h2>
+              <p className="text-neutral-600">
+                Please wait while we search for service providers in your area
               </p>
-              <div className="mt-4 flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-800"></div>
-              </div>
+              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
             </div>
           ) : viewAll && !providersList.length ? (
-            <div
-              className="text-center p-8 border border-[#D9D9D9] rounded-[10px] bg-white"
-              role="alert"
-            >
-              <div className="text-2xl font-bold text-gray-800">
+            <div className="text-center p-8 rounded-xl border border-neutral-200 bg-white space-y-4" role="alert">
+              <h2 className="text-2xl font-semibold text-neutral-900">
                 No Service Providers Found
-              </div>
-              <p className="text-gray-600 mt-3 mb-4">
+              </h2>
+              <p className="text-neutral-600">
                 Try searching with a different location or service type
               </p>
               <Button
-                className="bg-white text-black border border-gray-200"
+                variant="outline"
                 onClick={() => setViewAll(false)}
                 aria-label="Return to explore view"
-                variant="outline"
               >
                 Back to Explore
               </Button>
             </div>
-          ) : (
-            !!providersList.length && (
-              <div className="border border-[#D9D9D9] rounded-[10px] p-[20px] gap-6 flex flex-col">
-                {viewAll ? (
-                  <span>
-                    Showing {totalProviders}{" "}
-                    {totalProviders === 1 ? "result" : "results"}
-                  </span>
-                ) : (
-                  <div className="text-2xl font-bold">Explore Nearby</div>
-                )}
-                <div role="list" aria-label="Service providers">
-                  {providersList.map((user) => {
-                    return (
-                      <div key={user.id} role="listitem">
-                        <WorkerDescriptionCard {...user} />
-                      </div>
-                    );
-                  })}
-                </div>
-                {!viewAll && totalProviders > 2 && (
-                  <Button
-                    className="w-full bg-white text-black"
-                    onClick={() => {
-                      setViewAll(true);
-                    }}
-                    aria-label={`View all ${totalProviders} service providers`}
-                    variant="outline"
-                  >
-                    View all
-                  </Button>
-                )}
+          ) : !!providersList.length && (
+            <div className="rounded-xl border border-neutral-200 p-6 space-y-6">
+              {viewAll ? (
+                <p className="text-sm text-neutral-600">
+                  Showing {totalProviders} {totalProviders === 1 ? "result" : "results"}
+                </p>
+              ) : (
+                <h2 className="text-2xl font-semibold text-neutral-900">
+                  Explore Nearby
+                </h2>
+              )}
+
+              <div 
+                className="space-y-4"
+                role="list" 
+                aria-label="Service providers"
+              >
+                {providersList.map((provider) => (
+                  <div key={provider.id} role="listitem">
+                    <WorkerDescriptionCard {...provider} />
+                  </div>
+                ))}
               </div>
-            )
+
+              {!viewAll && totalProviders > 2 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setViewAll(true)}
+                  aria-label={`View all ${totalProviders} service providers`}
+                  className="w-full"
+                >
+                  View all providers ({totalProviders})
+                </Button>
+              )}
+            </div>
           )}
         </div>
       </GreyPaper>
+
       <Services />
-    </>
+    </div>
   );
 };
 

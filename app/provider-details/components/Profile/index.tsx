@@ -1,11 +1,41 @@
-import WhitePaper from "@/components/ui/white-paper";
-import { useAppContext } from "@/context/AppContext";
+import { FC } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
-import Image from 'next/image'; 
-import Logo from '@/public/images/logo.png';
+import { useAppContext } from "@/context/AppContext";
+import { Button } from "@/components/ui";
+import WhitePaper from "@/components/ui/white-paper";
+import { Star, Clock, Briefcase, Edit } from "lucide-react";
+import Logo from "@/public/images/logo.png";
 
-const Profile = ({ provider, editProfile }) => {
+interface ProfileProps {
+  provider?: {
+    user: {
+      firstName: string;
+      lastName: string;
+      reviewsReceived: Array<{ rating: number }>;
+      profilePicture?: string;
+    };
+    providerPicture?: string;
+    experienceYears: number;
+    serviceTypes: string[];
+    bio: string;
+    hourlyRate: number;
+    isNegotiable: boolean;
+  };
+  editProfile?: boolean;
+}
+
+const StarRating: FC<{ rating: number | string }> = ({ rating }) => {
+  if (rating === "N/A") return null;
+  return (
+    <div className="flex items-center gap-1.5">
+      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+      <span className="font-medium">{rating}</span>
+    </div>
+  );
+};
+
+const Profile: FC<ProfileProps> = ({ provider, editProfile }) => {
   const router = useRouter();
   const reviews = provider?.user?.reviewsReceived || [];
 
@@ -19,52 +49,60 @@ const Profile = ({ provider, editProfile }) => {
 
   return (
     <WhitePaper>
-      <div>
+      <div className="space-y-6">
         {/* Profile Header */}
-        <div className="flex items-center space-x-4">
+        <div className="flex gap-4">
           <Image
             src={provider.providerPicture || Logo}
-            alt="Profile"
-            className="w-14 h-14 rounded-full object-cover"
-            width={50}
-            height={50}
+            alt={`${provider.user.firstName}'s profile picture`}
+            className="w-16 h-16 rounded-full object-cover ring-2 ring-neutral-100"
+            width={64}
+            height={64}
           />
-          <div>
-            <h2 className="text-lg font-semibold">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-semibold text-neutral-900 truncate">
               {`${provider.user.firstName} ${provider.user.lastName}`}
             </h2>
-            <div className="flex space-x-4 text-gray-600 text-sm">
-              <p>
-                <strong>{provider.experienceYears}yrs</strong> Exp
-              </p>
-              <p>
-                {avgRating !== "N/A" && <strong>{avgRating}</strong>} Rating (
-                {reviews.length})
-              </p>
-              {/* Note: If you have completed jobs count, add it here */}
+            <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-neutral-600">
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                <span>
+                  <strong>{provider.experienceYears}yrs</strong> Experience
+                </span>
+              </div>
+              {avgRating !== "N/A" && (
+                <div className="flex items-center gap-1.5">
+                  <StarRating rating={avgRating} />
+                  <span className="text-neutral-500">({reviews.length})</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Job Title */}
+        {/* Service Type */}
+        <div>
+          <h3 className="inline-flex items-center gap-2 px-3 py-1 text-primary font-medium bg-primary/5 rounded-full">
+            <Briefcase className="w-4 h-4" />
+            {provider.serviceTypes[0]}
+          </h3>
+        </div>
 
-        <h3 className="text-teal-600 font-semibold mt-3">
-          {provider.serviceTypes[0]}
-        </h3>
-
-        {/* Description */}
-
-        <p className="text-gray-700 text-sm mt-2">{provider.bio}</p>
+        {/* Bio */}
+        <div>
+          <p className="text-neutral-600 leading-relaxed">{provider.bio}</p>
+        </div>
 
         {/* Skills */}
-
-        <div className="mt-4">
-          <h4 className="text-gray-800 font-semibold">Skills</h4>
-          <div className="flex flex-wrap gap-2 mt-2">
+        <div>
+          <h4 className="font-medium text-neutral-900 mb-3">
+            Skills & Services
+          </h4>
+          <div className="flex flex-wrap gap-2">
             {provider.serviceTypes.map((skill, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-md"
+                className="px-3 py-1.5 bg-neutral-100 text-neutral-700 text-sm rounded-full"
               >
                 {skill}
               </span>
@@ -72,31 +110,45 @@ const Profile = ({ provider, editProfile }) => {
           </div>
         </div>
 
-        {/* Pricing */}
-
-        <div className="mt-4 text-lg font-semibold">
-          <span className="text-black">£{provider.hourlyRate}/hr</span>
-          {provider.isNegotiable && (
-            <span className="text-green-500 text-sm ml-2">Negotiable</span>
-          )}
+        {/* Pricing and Negotiation */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="text-xl font-semibold text-neutral-900">
+              £{provider.hourlyRate}/hr
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2 text-sm">
+            <div className={`w-2 h-2 rounded-full ${provider.isNegotiable ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+            <span className="font-medium text-neutral-700">
+              {provider.isNegotiable ? 'Open to rate negotiation' : 'Fixed rate'}
+            </span>
+            <div className={`px-2 py-0.5 rounded-full text-xs ${
+              provider.isNegotiable 
+                ? 'bg-emerald-50 text-emerald-600' 
+                : 'bg-rose-50 text-rose-600'
+            }`}>
+              {provider.isNegotiable ? 'Negotiable' : 'Non-negotiable'}
+            </div>
+          </div>
         </div>
 
         {editProfile && (
-          <button
+          <Button
+            variant="secondary"
+            className="w-full"
             onClick={() => router.push("/auth/provider-details")}
-            className="w-full bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg mt-4"
           >
-            Edit profile
-          </button>
+            <Edit className="w-4 h-4 mr-2" />
+            Edit Profile
+          </Button>
         )}
       </div>
     </WhitePaper>
   );
 };
 
-export default Profile;
-
-export const ConsumerProfile = () => {
+export const ConsumerProfile: FC = () => {
   const { state } = useAppContext();
   const reviews = state?.user?.reviewsReceived || [];
 
@@ -110,30 +162,33 @@ export const ConsumerProfile = () => {
 
   return (
     <WhitePaper>
-      <div>
+      <div className="space-y-4">
         {/* Profile Header */}
-        <div className="flex items-center space-x-4">
+        <div className="flex gap-4">
           <Image
             src={state?.user?.profilePicture || Logo}
-            alt="Profile"
-            className="w-14 h-14 rounded-full object-cover"
-            height={50}
-            width={50}
+            alt="Profile picture"
+            className="w-16 h-16 rounded-full object-cover ring-2 ring-neutral-100"
+            width={64}
+            height={64}
           />
-          <div>
-            <h2 className="text-lg font-semibold">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-semibold text-neutral-900 truncate">
               {`${state?.user?.firstName} ${state?.user?.lastName}`}
             </h2>
-            <div className="flex space-x-4 text-gray-600 text-sm">
-              <p>
-                {avgRating !== "N/A" && <strong>{avgRating}</strong>} Rating (
-                {reviews.length})
-              </p>
-              {/* Note: If you have completed jobs count, add it here */}
-            </div>
+            {avgRating !== "N/A" && (
+              <div className="flex items-center gap-1.5 mt-1">
+                <StarRating rating={avgRating} />
+                <span className="text-sm text-neutral-500">
+                  ({reviews.length} reviews)
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </WhitePaper>
   );
 };
+
+export default Profile;

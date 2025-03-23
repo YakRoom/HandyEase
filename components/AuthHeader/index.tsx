@@ -20,12 +20,15 @@ const emptyRightSectionRoutes = [
 const selectedClass =
   "font-medium text-[16px] text-[#15151599] bg-[#E1E1E1] top-[14px] right-0 bottom-[14px] left-[12px] rounded-3xl";
 
-export default function Header({}: Readonly<any>) { // eslint-disable-line  @typescript-eslint/no-explicit-any 
+export default function Header({}: Readonly<any>) {
+  // eslint-disable-line  @typescript-eslint/no-explicit-any
   const pathname = usePathname();
-  const { state: appState } = useAppContext()
+  const { state: appState } = useAppContext();
   const isLoginRoute = loginRoute.includes(pathname);
   const isSignUpRoute = signUpRoutes.includes(pathname);
-  const showHamBurger =  appState?.isOnboarded ? !(isLoginRoute || isSignUpRoute) : false;
+  const showHamBurger = appState?.isOnboarded
+    ? !(isLoginRoute || isSignUpRoute)
+    : false;
   const showRightCtas = emptyRightSectionRoutes.includes(pathname);
   const showExit = isLoginRoute || isSignUpRoute;
   const router = useRouter();

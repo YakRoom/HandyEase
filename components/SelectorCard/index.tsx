@@ -1,8 +1,26 @@
 import { FC, memo } from "react";
-import clsx from "clsx";
 import Dropdown from "../ui/dropdown";
+import { Check } from "lucide-react";
 
-const SelectorCard: FC = ({
+interface ServiceOption {
+  key: string;
+  value: string;
+}
+
+interface SelectorCardProps {
+  checked: boolean;
+  name: string;
+  description: string;
+  img: JSX.Element;
+  id: string;
+  handleSelectCategory: (id: string) => void;
+  dropwdownOptions: ServiceOption[];
+  serviceType: string;
+  setSelectedServiceType: (key: string) => void;
+  className?: string;
+}
+
+const SelectorCard: FC<SelectorCardProps> = ({
   checked,
   name,
   description,
@@ -12,48 +30,71 @@ const SelectorCard: FC = ({
   dropwdownOptions,
   serviceType,
   setSelectedServiceType,
+  className = "",
 }) => {
   return (
     <div
-      className={`w-[50%] h-40 bg-[#D9D9D9] border flex flex-col justify-around p-3  rounded-lg text-sm ${clsx(
-        checked ? "bg-[#FFFFFF]" : "bg-[#D9D9D9]"
-      )}`}
+      className={`relative flex flex-col p-4 rounded-xl transition-colors ${
+        checked
+          ? "bg-white shadow-sm border border-primary/20"
+          : "bg-neutral-100 hover:bg-neutral-50"
+      } ${className}`}
       onClick={() => handleSelectCategory(id)}
+      role="radio"
+      aria-checked={checked}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleSelectCategory(id);
+        }
+      }}
     >
-      <span
-        className={`rounded-full h-[17px] w-[17px] bg-none ${clsx(
-          "border-4",
-          checked ? "border-[#00a699]" : "border-white"
-        )}`}
-      ></span>
-      <p className="text-[14px] h-[35px] text-[#151515CC] leading-[100%] w-[125px]">
-        {" "}
-        {description}
-      </p>
-      <div className="w-[100%] flex justify-between items-center">
-        <p
-          className={` text-[16px] text-[#00A699] ${clsx(
-            checked ? "text-[#00a699]" : "text-white"
-          )} `}
-        >
-          {name}
-        </p>
-
-        <span
-          className={`${clsx(
-            checked ? "text-[#00a699]" : "text-white w-[28px]"
-          )}`}
-        >
-          {" "}
-          {img}
-        </span>
+      <div
+        className={`h-6 w-6 rounded-full border-2 transition-colors mb-3 ${
+          checked
+            ? "border-primary bg-primary/10"
+            : "border-neutral-300 bg-white"
+        }`}
+      >
+        {checked && (
+          <Check className="h-4 w-4 text-primary m-0.5" aria-hidden="true" />
+        )}
       </div>
-      <Dropdown
-        options={dropwdownOptions}
-        selectedOption={serviceType}
-        handleSelectOption={(option) => setSelectedServiceType(option.key)}
-        isDisabled={!checked}
-      />
+
+      <div className="space-y-4 flex-1">
+        <div className="space-y-1">
+          <h3
+            className={`text-base font-medium transition-colors ${
+              checked ? "text-primary" : "text-neutral-600"
+            }`}
+          >
+            {name}
+          </h3>
+          <p className="text-sm text-neutral-600 line-clamp-2">{description}</p>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div
+            className={`transition-colors ${
+              checked ? "text-primary" : "text-neutral-400"
+            }`}
+          >
+            {img}
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <Dropdown
+            options={dropwdownOptions}
+            selectedOption={serviceType}
+            handleSelectOption={(option) => setSelectedServiceType(option.key)}
+            isDisabled={!checked}
+            className={checked ? "opacity-100" : "opacity-50"}
+            aria-label={`Select ${name.toLowerCase()} service type`}
+          />
+        </div>
+      </div>
     </div>
   );
 };

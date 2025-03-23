@@ -78,7 +78,45 @@ export function AppProvider({ children }: AppProviderProps) {
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      {isInitApisLoading ? <div>Loading...</div> : children}
+      {isInitApisLoading ? (
+        <div className="fixed inset-0 flex items-center justify-center bg-white my-12">
+          <div className="space-y-8 text-center">
+            <div className="relative">
+              {/* Outer glow */}
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary via-primary/60 to-primary rounded-full blur-md animate-[spin_4s_linear_infinite]" />
+
+              {/* Main container */}
+              <div className="relative w-28 h-28 rounded-full bg-white flex items-center justify-center">
+                {/* Background circles */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-24 h-24 border-8 border-primary/10 rounded-full" />
+                </div>
+
+                {/* Spinning borders */}
+                <div className="absolute inset-0 border-t-8 border-r-8 border-primary rounded-full animate-[spin_0.8s_linear_infinite]" />
+                <div className="absolute inset-0 border-b-8 border-l-8 border-primary/30 rounded-full animate-[spin_1.2s_linear_infinite_reverse]" />
+
+                {/* Center dot with trail */}
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-primary/20 rounded-full blur-sm animate-pulse" />
+                  <div className="w-4 h-4 bg-primary rounded-full animate-[bounce_1s_ease-in-out_infinite]" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-semibold text-primary animate-[pulse_2s_ease-in-out_infinite]">
+                Loading Handyman
+              </h2>
+              <p className="text-sm text-neutral-500 mt-2 animate-[pulse_2s_ease-in-out_infinite_0.5s]">
+                Please wait while we set things up
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </AppContext.Provider>
   );
 }

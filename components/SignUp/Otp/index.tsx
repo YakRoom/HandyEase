@@ -1,67 +1,119 @@
 import { FC, memo, useEffect, useState } from "react";
-import {
-  Input,
-  Button,
-  // InputOTP,
-  // InputOTPGroup,
-  // InputOTPSlot,
-  // InputOTPSeparator,
-} from "@/components/ui";
+import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui";
 import { useAppContext } from "@/context/AppContext";
 import { useAuthControllerVerifyOtp } from "@/apis/generated";
 import { ArrowRight } from "lucide-react";
+import WhitePaper from "@/components/ui/white-paper";
 
-const OtpStep: FC<{ setStep: React.Dispatch<React.SetStateAction<number>> }> = ({ setStep }) => {
-  const { state } = useAppContext();
+interface OtpStepProps {
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const OtpStep: FC<OtpStepProps> = ({ setStep }) => {
+  const { state, dispatch } = useAppContext();
   const [otp, setOtp] = useState<number>();
-  const { mutate, data } = useAuthControllerVerifyOtp();
+  const { mutate, data, isPending } = useAuthControllerVerifyOtp();
 
-  const { dispatch } = useAppContext();
   useEffect(() => {
     if (data?.user) {
       dispatch({
         type: "SET_USER",
-        payload: data?.user,
+        payload: data.user,
       });
     }
   }, [data, dispatch]);
-  // console.log(data);
 
-  // const otpSlotClasses = "bg-[#F4F4F4] w-[45] h-[45] rounded-[6px]";
+  const handleSubmit = () => {
+    if (otp && otp >= 1000) {
+      mutate({
+        data: { otp },
+        onSuccess: () => setStep((prev: number) => prev + 1),
+      });
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4 bg-white rounded-xl p-4">
-      <div className="text-2xl font-bold">
-        Enter the 4-digit code sent to you at:
-      </div>
-      <div className="text-lg font-bold">{state?.user?.email}</div>
-      <Input
-              placeholder="OTP"
-              type="number"
-              className="bg-[#F4F4F4] rounded-lg h-12 text-[16px] font-semibold"
-              value={otp}
-              onChange={(e) => setOtp(parseInt(e?.target?.value, 10))}
-            />
+    <WhitePaper className="max-w-md mx-auto">
+      <div className="space-y-6 p-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
+            Verify your email
+          </h1>
+          <p className="text-sm text-neutral-600">
+            Enter the 4-digit code sent to:
+            <span className="block mt-1 font-medium text-neutral-900">
+              {state?.user?.email}
+            </span>
+          </p>
+        </div>
 
-      <p className="text-[16px] font-medium text-[#151515CC]">
-        Tip: Be sure to check your inbox and spam folders
-      </p>
-      <Button
-        disabled={!otp || otp < 999}
-        onClick={() => {
-          mutate({ data: { otp } });
-          setStep((prev: number) => prev + 1);
-        }}
-        variant="outline"
-        className="w-20 bg-gray-50 font-bold rounded-3xl text-xs"
-      >
-        Next
-        <ArrowRight />
-      </Button>
-      <div className="text-sm mt-16">
-        Get the job done with low prices connect directly with 100s of crew
-        member in your local area
+        <div
+          className="space-y-4"
+          role="group"
+          aria-label="Enter verification code"
+        >
+          <InputOTP
+            maxLength={4}
+            onChange={(value) => setOtp(parseInt(value, 10))}
+            onKeyDown={handleKeyDown}
+          >
+            <InputOTPGroup className="flex justify-center gap-4">
+              {[0, 1, 2, 3].map((index) => (
+                <InputOTPSlot
+                  key={index}
+                  index={index}
+                  className="w-14 h-14 text-lg font-medium border border-neutral-200 rounded-lg bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors"
+                />
+              ))}
+            </InputOTPGroup>
+          </InputOTP>
+
+          <p className="text-sm text-neutral-600 flex items-center gap-2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-neutral-400"
+            >
+              <path
+                d="M8 1.33334C4.32 1.33334 1.33333 4.32001 1.33333 8.00001C1.33333 11.68 4.32 14.6667 8 14.6667C11.68 14.6667 14.6667 11.68 14.6667 8.00001C14.6667 4.32001 11.68 1.33334 8 1.33334ZM8.66667 11.3333H7.33333V7.33334H8.66667V11.3333ZM8.66667 6.00001H7.33333V4.66668H8.66667V6.00001Z"
+                fill="currentColor"
+              />
+            </svg>
+            Check your inbox and spam folders
+          </p>
+        </div>
+
+        <Button
+          onClick={handleSubmit}
+          disabled={!otp || otp < 1000 || isPending}
+          className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+          isLoading={isPending}
+          loadingText="Verifying..."
+        >
+          <span className="flex items-center gap-2">
+            Continue
+            <ArrowRight
+              size={16}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </span>
+        </Button>
+
+        <div className="text-sm text-center text-neutral-600">
+          Get the job done with low prices. Connect directly with hundreds of
+          crew members in your local area.
+        </div>
       </div>
-    </div>
+    </WhitePaper>
   );
 };
 

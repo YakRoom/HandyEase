@@ -1,90 +1,104 @@
 "use client";
-// @ts-nocheck
+
+import { FC, memo, useEffect, useState } from "react";
 import { useUsersControllerUpdateUserInfo } from "@/apis/generated";
 import { CreateUserDtoRole } from "@/apis/generated.schemas";
-import WhitePaper from "@/components/ui/white-paper";
-import { AppState, useAppContext } from "@/context/AppContext";
-import { get } from "lodash";
+import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import { memo, useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import WhitePaper from "@/components/ui/white-paper";
+import { Button } from "@/components/ui";
+import Link from "next/link";
 
 const TermsConditions: FC = () => {
   const router = useRouter();
-  const { mutate, data } = useUsersControllerUpdateUserInfo();
+  const { mutate, data, isPending } = useUsersControllerUpdateUserInfo();
   const { dispatch, state } = useAppContext();
 
   useEffect(() => {
-    if (get(data, "firstName")) {
+    if (data?.firstName) {
       dispatch({
         type: "SET_USER",
-        payload: data as unknown as AppState["user"],
+        payload: data,
       });
     }
   }, [data, dispatch]);
 
   useEffect(() => {
-    if (
-      state?.user?.policyAccepted && // @ts-expect-error need to fix types
-      state?.user?.role === CreateUserDtoRole.CONSUMER
-    ) {
+    if (state?.user?.policyAccepted && state?.user?.role === CreateUserDtoRole.CONSUMER) {
       router.replace("/");
     }
   }, [state?.user?.policyAccepted, router, state?.user?.role]);
 
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleSubmit = () => {
+    if (isChecked) {
+      mutate({
+        data: {
+          policyAccepted: true,
+        },
+      });
+    }
+  };
+
   return (
-    <WhitePaper>
-      {" "}
-      {/* Header */}
-      <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold">
-          Accept Handymate&apos;s Terms & Review Privacy Notice
-        </h2>
-      </div>
-      {/* Terms Text */}
-      <p className="text-sm text-gray-600 mt-4">
-        By selecting &apos;I Agree&apos; below, I have reviewed and agree to the{" "}
-        <a href="#" className="text-blue-600 underline">
-          Terms of Use
-        </a>{" "}
-        and acknowledge the{" "}
-        <a href="#" className="text-blue-600 underline">
-          Privacy Notice
-        </a>
-        . I am at least 18 years of age.
-      </p>
-      {/* Checkbox */}
-      <div className="mt-4 flex items-center space-x-2">
-        <input
-          type="checkbox"
-          id="agree"
-          checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
-          className="w-5 h-5 border-gray-400"
-        />
-        <label htmlFor="agree" className="text-sm text-gray-800">
-          I agree
-        </label>
-      </div>
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-6">
-        <button
-          onClick={() => {
-            mutate({
-              data: {
-                policyAccepted: true,
-              },
-            });
-          }}
-          disabled={!isChecked}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            isChecked
-              ? "bg-black text-white"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          Next R
-        </button>
+    <WhitePaper className="max-w-md mx-auto">
+      <div className="space-y-6 p-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
+            Terms & Privacy
+          </h1>
+          <p className="text-sm text-neutral-600">
+            Please review and accept our terms to continue
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="p-4 bg-neutral-50 rounded-lg text-sm text-neutral-700 leading-relaxed">
+            By selecting &apos;I Agree&apos; below, I confirm that:
+            <ul className="list-disc ml-5 mt-2 space-y-1">
+              <li>I have reviewed and agree to the <Link href="/terms" className="text-primary hover:text-primary-hover underline transition-colors">Terms of Use</Link></li>
+              <li>I acknowledge the <Link href="/privacy" className="text-primary hover:text-primary-hover underline transition-colors">Privacy Notice</Link></li>
+              <li>I am at least 18 years of age</li>
+            </ul>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              id="agree"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+              className="h-5 w-5 rounded border-neutral-300 text-primary focus:ring-primary transition-colors cursor-pointer"
+              aria-describedby="terms-description"
+            />
+            <label 
+              htmlFor="agree" 
+              className="text-sm text-neutral-700 select-none cursor-pointer"
+            >
+              I agree to the terms and conditions
+            </label>
+          </div>
+
+          <Button
+            onClick={handleSubmit}
+            disabled={!isChecked || isPending}
+            isLoading={isPending}
+            loadingText="Processing..."
+            className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              Continue
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </span>
+          </Button>
+        </div>
+
+        <div className="text-xs text-center text-neutral-500">
+          By continuing, you agree to let Handymate collect and process your personal data. 
+          See our <Link href="/privacy" className="text-primary hover:text-primary-hover underline transition-colors">Privacy Policy</Link> for more details.
+        </div>
       </div>
     </WhitePaper>
   );
