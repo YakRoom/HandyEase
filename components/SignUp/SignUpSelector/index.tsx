@@ -17,19 +17,21 @@ const options: SignUpOption[] = [
   {
     role: CreateUserDtoRole.CONSUMER,
     title: "Sign up as a customer",
-    description: "Get the job done with low prices. Connect directly with hundreds of crew members in your local area.",
+    description:
+      "Get the job done with low prices. Connect directly with hundreds of crew members in your local area.",
   },
   {
     role: CreateUserDtoRole.PROVIDER,
     title: "Sign up to be part of the crew",
-    description: "Join the crew and find hundreds of jobs waiting for you with complete flexibility.",
+    description:
+      "Join the crew and find hundreds of jobs waiting for you with complete flexibility.",
   },
 ];
 
 const SignUpSelector: FC<SignUpSelectorProps> = ({ setUserType }) => {
   return (
     <WhitePaper className="max-w-2xl mx-auto">
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
           Choose your account type
         </h1>
@@ -54,8 +56,8 @@ const SignUpSelector: FC<SignUpSelectorProps> = ({ setUserType }) => {
                       {option.description}
                     </p>
                   </div>
-                  <ArrowRight 
-                    size={24} 
+                  <ArrowRight
+                    size={24}
                     className="text-neutral-400 group-hover:text-primary transition-colors"
                     aria-hidden="true"
                   />

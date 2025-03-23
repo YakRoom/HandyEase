@@ -58,18 +58,17 @@ const NameStep: FC<NameStepProps> = ({ setStep }) => {
     return isValid;
   };
 
-  const handleInputChange = (field: keyof FormState) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: e.target.value,
-    }));
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "",
-    }));
-  };
+  const handleInputChange =
+    (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }));
+    };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +84,7 @@ const NameStep: FC<NameStepProps> = ({ setStep }) => {
 
   return (
     <WhitePaper className="max-w-md mx-auto">
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             What&apos;s your name?
@@ -104,10 +103,16 @@ const NameStep: FC<NameStepProps> = ({ setStep }) => {
               value={formData.firstName}
               onChange={handleInputChange("firstName")}
               aria-invalid={!!errors.firstName}
-              aria-describedby={errors.firstName ? "firstName-error" : undefined}
+              aria-describedby={
+                errors.firstName ? "firstName-error" : undefined
+              }
             />
             {errors.firstName && (
-              <p id="firstName-error" className="text-error text-sm" role="alert">
+              <p
+                id="firstName-error"
+                className="text-error text-sm"
+                role="alert"
+              >
                 {errors.firstName}
               </p>
             )}
@@ -124,7 +129,11 @@ const NameStep: FC<NameStepProps> = ({ setStep }) => {
               aria-describedby={errors.lastName ? "lastName-error" : undefined}
             />
             {errors.lastName && (
-              <p id="lastName-error" className="text-error text-sm" role="alert">
+              <p
+                id="lastName-error"
+                className="text-error text-sm"
+                role="alert"
+              >
                 {errors.lastName}
               </p>
             )}
@@ -139,13 +148,17 @@ const NameStep: FC<NameStepProps> = ({ setStep }) => {
           >
             <span className="flex items-center gap-2">
               Continue
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight
+                size={16}
+                className="transition-transform group-hover:translate-x-1"
+              />
             </span>
           </Button>
         </form>
 
         <div className="text-sm text-center text-neutral-600">
-          Get the job done with low prices. Connect directly with hundreds of crew members in your local area.
+          Get the job done with low prices. Connect directly with hundreds of
+          crew members in your local area.
         </div>
       </div>
     </WhitePaper>

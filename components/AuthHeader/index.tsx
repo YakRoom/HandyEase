@@ -7,9 +7,7 @@ import Hamburger from "@/public/images/hamBurger.svg";
 import { useAppContext } from "@/context/AppContext";
 
 const signUpRoutes = ["/auth/sign-up"];
-
 const loginRoute = ["/auth/login"];
-
 const emptyRightSectionRoutes = [
   "/auth/otp-verification",
   "/auth/add-name",
@@ -17,13 +15,11 @@ const emptyRightSectionRoutes = [
   "/auth/provider-details",
 ];
 
-const selectedClass =
-  "font-medium text-[16px] text-[#15151599] bg-[#E1E1E1] top-[14px] right-0 bottom-[14px] left-[12px] rounded-3xl";
-
-export default function Header({}: Readonly<any>) {
-  // eslint-disable-line  @typescript-eslint/no-explicit-any
+export default function Header() {
   const pathname = usePathname();
   const { state: appState } = useAppContext();
+  const router = useRouter();
+
   const isLoginRoute = loginRoute.includes(pathname);
   const isSignUpRoute = signUpRoutes.includes(pathname);
   const showHamBurger = appState?.isOnboarded
@@ -31,58 +27,80 @@ export default function Header({}: Readonly<any>) {
     : false;
   const showRightCtas = emptyRightSectionRoutes.includes(pathname);
   const showExit = isLoginRoute || isSignUpRoute;
-  const router = useRouter();
+
   return (
-    <div className="flex justify-between mb-3 items-center">
-      <Image
-        src={Logo}
-        alt="thumbnail"
-        height={"40"}
-        width={"40"}
+    <header className="flex items-center justify-between h-16 mb-6">
+      <button
         onClick={() => router.push("/")}
-      />
+        className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg"
+        aria-label="Go to homepage"
+      >
+        <Image
+          src={Logo}
+          alt="Handyman Logo"
+          height={40}
+          width={40}
+          className="w-10 h-10"
+        />
+      </button>
+
       {!showRightCtas && (
-        <div className="bg-[#EEEEEE] rounded-3xl flex">
+        <nav className="flex items-center bg-neutral-100 rounded-full">
           {showHamBurger ? (
-            <Image
-              src={Hamburger}
-              alt="facebook"
-              height={"40"}
-              width={"40"}
+            <button
               onClick={() => router.push("/view-profile")}
-            />
+              className="p-2 hover:bg-neutral-200 rounded-full transition-colors"
+              aria-label="Open menu"
+            >
+              <Image
+                src={Hamburger}
+                alt="Menu"
+                height={24}
+                width={24}
+                className="w-6 h-6"
+              />
+            </button>
           ) : (
-            <>
+            <div className="flex items-center gap-1 p-1">
               <button
-                className={`px-4 py-2 font-medium ${
-                  isLoginRoute ? selectedClass : "text-gray-500"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  isLoginRoute
+                    ? "bg-neutral-200 text-neutral-900"
+                    : "text-neutral-600 hover:text-neutral-900"
                 }`}
                 onClick={() => router.push("/auth/login")}
               >
                 Log In
               </button>
               <button
-                className={`px-4 py-2 font-medium ${
-                  isSignUpRoute ? selectedClass : "text-gray-500"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  isSignUpRoute
+                    ? "bg-neutral-200 text-neutral-900"
+                    : "text-neutral-600 hover:text-neutral-900"
                 }`}
                 onClick={() => router.push("/auth/sign-up")}
               >
                 Sign Up
               </button>
               {showExit && (
-                <Image
-                  src={Close}
-                  alt="facebook"
-                  height={"12"}
-                  width={"12"}
-                  className="mr-[16px]"
+                <button
                   onClick={() => router.push("/")}
-                />
+                  className="p-2 hover:bg-neutral-200 rounded-full transition-colors"
+                  aria-label="Close"
+                >
+                  <Image
+                    src={Close}
+                    alt="Close"
+                    height={16}
+                    width={16}
+                    className="w-4 h-4"
+                  />
+                </button>
               )}
-            </>
+            </div>
           )}
-        </div>
+        </nav>
       )}
-    </div>
+    </header>
   );
 }

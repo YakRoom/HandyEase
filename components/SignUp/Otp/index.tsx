@@ -40,7 +40,7 @@ const OtpStep: FC<OtpStepProps> = ({ setStep }) => {
 
   return (
     <WhitePaper className="max-w-md mx-auto">
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Verify your email

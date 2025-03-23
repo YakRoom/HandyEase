@@ -49,12 +49,14 @@ const EmailStep: FC<EmailStepProps> = ({ userType, setStep }) => {
     }
 
     // Password validation
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!password) {
       newErrors.password = "Password is required";
       isValid = false;
     } else if (!passwordRegex.test(password)) {
-      newErrors.password = "Password must be 8+ characters with uppercase, number & special character";
+      newErrors.password =
+        "Password must be 8+ characters with uppercase, number & special character";
       isValid = false;
     }
 
@@ -83,7 +85,7 @@ const EmailStep: FC<EmailStepProps> = ({ userType, setStep }) => {
 
   return (
     <WhitePaper className="max-w-md mx-auto">
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Create your account
@@ -130,7 +132,11 @@ const EmailStep: FC<EmailStepProps> = ({ userType, setStep }) => {
               aria-describedby={errors.password ? "password-error" : undefined}
             />
             {errors.password && (
-              <p id="password-error" className="text-error text-sm" role="alert">
+              <p
+                id="password-error"
+                className="text-error text-sm"
+                role="alert"
+              >
                 {errors.password}
               </p>
             )}
@@ -148,7 +154,8 @@ const EmailStep: FC<EmailStepProps> = ({ userType, setStep }) => {
         </form>
 
         <div className="text-sm text-center text-neutral-600">
-          Get the job done with low prices. Connect directly with hundreds of crew members in your local area.
+          Get the job done with low prices. Connect directly with hundreds of
+          crew members in your local area.
         </div>
       </div>
     </WhitePaper>

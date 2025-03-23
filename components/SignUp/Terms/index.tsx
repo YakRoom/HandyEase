@@ -25,7 +25,10 @@ const TermsConditions: FC = () => {
   }, [data, dispatch]);
 
   useEffect(() => {
-    if (state?.user?.policyAccepted && state?.user?.role === CreateUserDtoRole.CONSUMER) {
+    if (
+      state?.user?.policyAccepted &&
+      state?.user?.role === CreateUserDtoRole.CONSUMER
+    ) {
       router.replace("/");
     }
   }, [state?.user?.policyAccepted, router, state?.user?.role]);
@@ -44,7 +47,7 @@ const TermsConditions: FC = () => {
 
   return (
     <WhitePaper className="max-w-md mx-auto">
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             Terms & Privacy
@@ -58,8 +61,24 @@ const TermsConditions: FC = () => {
           <div className="p-4 bg-neutral-50 rounded-lg text-sm text-neutral-700 leading-relaxed">
             By selecting &apos;I Agree&apos; below, I confirm that:
             <ul className="list-disc ml-5 mt-2 space-y-1">
-              <li>I have reviewed and agree to the <Link href="/terms" className="text-primary hover:text-primary-hover underline transition-colors">Terms of Use</Link></li>
-              <li>I acknowledge the <Link href="/privacy" className="text-primary hover:text-primary-hover underline transition-colors">Privacy Notice</Link></li>
+              <li>
+                I have reviewed and agree to the{" "}
+                <Link
+                  href="/terms"
+                  className="text-primary hover:text-primary-hover underline transition-colors"
+                >
+                  Terms of Use
+                </Link>
+              </li>
+              <li>
+                I acknowledge the{" "}
+                <Link
+                  href="/privacy"
+                  className="text-primary hover:text-primary-hover underline transition-colors"
+                >
+                  Privacy Notice
+                </Link>
+              </li>
               <li>I am at least 18 years of age</li>
             </ul>
           </div>
@@ -73,8 +92,8 @@ const TermsConditions: FC = () => {
               className="h-5 w-5 rounded border-neutral-300 text-primary focus:ring-primary transition-colors cursor-pointer"
               aria-describedby="terms-description"
             />
-            <label 
-              htmlFor="agree" 
+            <label
+              htmlFor="agree"
               className="text-sm text-neutral-700 select-none cursor-pointer"
             >
               I agree to the terms and conditions
@@ -90,14 +109,24 @@ const TermsConditions: FC = () => {
           >
             <span className="flex items-center gap-2">
               Continue
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight
+                size={16}
+                className="transition-transform group-hover:translate-x-1"
+              />
             </span>
           </Button>
         </div>
 
         <div className="text-xs text-center text-neutral-500">
-          By continuing, you agree to let Handymate collect and process your personal data. 
-          See our <Link href="/privacy" className="text-primary hover:text-primary-hover underline transition-colors">Privacy Policy</Link> for more details.
+          By continuing, you agree to let Handymate collect and process your
+          personal data. See our{" "}
+          <Link
+            href="/privacy"
+            className="text-primary hover:text-primary-hover underline transition-colors"
+          >
+            Privacy Policy
+          </Link>{" "}
+          for more details.
         </div>
       </div>
     </WhitePaper>
