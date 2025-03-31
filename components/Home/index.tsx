@@ -17,6 +17,7 @@ import HandymenIcon from "@/public/images/handymen-icon";
 import CleanerIcon from "@/public/images/cleaner-icon";
 import thumbnail from "@/public/images/thumbnail.png";
 import { Search, Loader2 } from "lucide-react";
+import Loader from "../ui/onAppload";
 
 interface ServiceType {
   name: string;
@@ -47,9 +48,10 @@ const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
   const [selectedCategory, setSelectedCategory] = useState<ServiceType["id"]>(SERVICE_TYPES[0].id);
   const [serviceType, setSelectedServiceType] = useState("");
-  const { data: serviceData } = useProvidersControllerGetServiceTypes();
+  const { data: serviceData,isLoading } = useProvidersControllerGetServiceTypes();
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
+console.log("servicedata", serviceData);
 
   useEffect(() => {
     if (state?.searchedLocation?.placeId) {
@@ -93,6 +95,8 @@ const Home: FC = () => {
 
   return (
     <div className="space-y-8">
+      {/* {isLoading &&  <Loader/>} */}
+     
       <GreyPaper className="space-y-6">
         <div className="space-y-4">
           <h1 className="text-4xl font-bold tracking-tight text-neutral-900">
@@ -104,9 +108,11 @@ const Home: FC = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-xl border border-neutral-200 bg-white/50 p-6 space-y-6">
+          <div className="rounded-xl w-[95vw] ml-[-7px] border border-neutral-200 bg-white/50 px-6 py-6
+ space-y-6">
             <SearchProviders
               searchedLocation={state?.searchedLocation?.description}
+              setViewAll={setViewAll}
               onSelect={(option) =>
                 dispatch({
                   type: "SET_SEARCHED_LOCATION",
@@ -118,11 +124,12 @@ const Home: FC = () => {
               }
             />
 
-            <div>
-              <h2 className="text-base font-semibold mb-4">Select the service type</h2>
+            <div className=" space-y-4">
+              <h2 className="text-base font-semibold">Select the service type</h2>
               <div className="grid grid-cols-2 gap-4">
                 {SERVICE_TYPES.map((service) => (
                   <SelectorCard
+                  viewAll={viewAll}
                     key={service.id}
                     handleSelectCategory={setSelectedCategory}
                     dropwdownOptions={serviceData?.[service.id] || []}
@@ -140,6 +147,7 @@ const Home: FC = () => {
               onClick={handleSearch}
               className="w-full h-12 font-medium"
               disabled={!state?.searchedLocation?.placeId || !serviceType}
+              isLoading={isPending}
             >
               <Search className="w-4 h-4 mr-2" />
               Search Providers

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
@@ -6,6 +6,8 @@ import { Button } from "@/components/ui";
 import WhitePaper from "@/components/ui/white-paper";
 import { Star, Clock, Briefcase, Edit } from "lucide-react";
 import Logo from "@/public/images/logo.png";
+import useBodyScrollLock from "@/hooks/useBodyScrollLock";
+import Modal from "@/components/ui/logoutModal";
 
 interface ProfileProps {
   provider?: {
@@ -143,14 +145,18 @@ const Profile: FC<ProfileProps> = ({ provider, editProfile }) => {
             Edit Profile
           </Button>
         )}
+      
       </div>
     </WhitePaper>
   );
 };
 
 export const ConsumerProfile: FC = () => {
-  const { state } = useAppContext();
+  const { state,dispatch } = useAppContext();
   const reviews = state?.user?.reviewsReceived || [];
+
+  const [showModal, setShowModal] = useState(false)
+  const router = useRouter();
 
   const avgRating =
     reviews.length > 0
@@ -159,7 +165,14 @@ export const ConsumerProfile: FC = () => {
           reviews.length
         ).toFixed(1)
       : "N/A";
+      useBodyScrollLock(showModal);
 
+  
+      const handleLogout = () => {
+        localStorage.removeItem("token");
+        dispatch({ type: "LOGOUT" });
+        router.push("/");
+      };
   return (
     <WhitePaper>
       <div className="space-y-4">
@@ -186,7 +199,18 @@ export const ConsumerProfile: FC = () => {
             )}
           </div>
         </div>
+        <Button onClick={()=>setShowModal(true)} variant="secondary" className="w-full text-red-600">Log Out</Button>
+        <Modal
+        isModal={showModal}
+        setShowModal={setShowModal}
+        title="Confirm Logout"
+        message="Are you sure you want to log out?"
+        confirmText="Log Out"
+        cancelText="Cancel"
+        onConfirm={handleLogout}
+      />
       </div>
+  
     </WhitePaper>
   );
 };

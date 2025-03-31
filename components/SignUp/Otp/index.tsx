@@ -95,7 +95,7 @@ const OtpStep: FC<OtpStepProps> = ({ setStep }) => {
         <Button
           onClick={handleSubmit}
           disabled={!otp || otp < 1000 || isPending}
-          className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+          className="w-full h-12 text-white  disabled:opacity-50 rounded-lg transition-colors"
           isLoading={isPending}
           loadingText="Verifying..."
         >

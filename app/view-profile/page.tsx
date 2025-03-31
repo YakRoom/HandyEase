@@ -31,7 +31,7 @@ const ViewProfile = () => {
       {state?.user?.role === CreateUserDtoRole.CONSUMER && <ConsumerProfile />}
       {state?.user?.role === CreateUserDtoRole.PROVIDER && (
         <Profile editProfile provider={providerDetails} />
-      )}
+      )}    
       {state?.user && <Reviews reviews={reviews} />}
     </GreyPaper>
   );

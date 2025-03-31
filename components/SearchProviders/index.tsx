@@ -1,7 +1,16 @@
-import { FC, useEffect, useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import {
+  FC,
+  useEffect,
+  useState,
+  useRef,
+  KeyboardEvent,
+  ChangeEvent,
+} from "react";
 import { useProvidersControllerGetSuggestions } from "@/apis/generated";
 import { Input } from "@/components/ui";
-import { Loader2, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
+import Close from "@/public/images/close.svg";
+import Image from "next/image";
 
 interface SearchProvidersProps {
   searchedLocation?: string;
@@ -16,11 +25,15 @@ interface LocationSuggestion {
 
 const SearchProviders: FC<SearchProvidersProps> = ({
   searchedLocation,
+  setViewAll,
   onSelect,
   className = "",
 }) => {
-  const { mutate: mutateSuggestions, data, isPending } =
-    useProvidersControllerGetSuggestions();
+  const {
+    mutate: mutateSuggestions,
+    data,
+    isPending,
+  } = useProvidersControllerGetSuggestions();
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [search, setSearch] = useState(searchedLocation || "");
@@ -28,7 +41,10 @@ const SearchProviders: FC<SearchProvidersProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -74,11 +90,12 @@ const SearchProviders: FC<SearchProvidersProps> = ({
     setSearch(e.target.value);
     setShowDropdown(true);
     setSelectedIndex(-1);
+    setViewAll(false)
   };
 
   return (
-    <div 
-      className={`relative ${className}`} 
+    <div
+      className={`relative ${className}`}
       ref={searchRef}
       role="combobox"
       aria-expanded={showDropdown}
@@ -86,21 +103,54 @@ const SearchProviders: FC<SearchProvidersProps> = ({
       aria-controls="location-suggestions"
     >
       <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+        {search.length === 0 && (
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-8 text-neutral-500 flex items-center justify-center">
+  <MapPin className="h-5" />
+          </div>
+        
+        )}
         <Input
           value={search}
-          className="pl-10 form-input"
+          className={`form-input ${search.length === 0 && "location_form_input"}`}
           placeholder="Enter your postcode"
           onChange={handleSearchChange}
           onKeyDown={handleKeyDown}
           aria-label="Search location"
           aria-autocomplete="list"
           aria-controls="location-suggestions"
-          aria-activedescendant={selectedIndex >= 0 ? `option-${selectedIndex}` : undefined}
+          aria-activedescendant={
+            selectedIndex >= 0 ? `option-${selectedIndex}` : undefined
+          }
         />
-        {isPending && (
-          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-neutral-500" />
-        )}
+        {
+            search.length > 0 &&
+          (<div
+            className="absolute right-0 h-full top-0  w-7 flex items-center justify-center"
+            onClick={() => setSearch("")}
+            >
+    
+          
+              <Image
+              src={Close}
+              alt="Close"
+              height={26}
+              width={26}
+              className="w-3"
+            />
+        
+          </div>)
+        }
+
+        {/* <div className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 rounded-full bg-gray-200 p-1"
+        onClick={()=>setSearch("")}>
+        <Image
+          src={Close}
+          alt="Close"
+          height={26}
+          width={26}
+          className="bg-gray-200"
+        />
+        </div> */}
       </div>
 
       {showDropdown && search && (
@@ -111,7 +161,10 @@ const SearchProviders: FC<SearchProvidersProps> = ({
           aria-label="Location suggestions"
         >
           {isPending ? (
-            <li className="px-4 py-3 text-sm text-neutral-600 text-center" role="status">
+            <li
+              className="px-4 py-3 text-sm text-neutral-600 text-center"
+              role="status"
+            >
               Searching locations...
             </li>
           ) : data?.length ? (
@@ -122,9 +175,10 @@ const SearchProviders: FC<SearchProvidersProps> = ({
                 role="option"
                 aria-selected={selectedIndex === index}
                 className={`px-4 py-3 text-sm cursor-pointer flex items-center gap-2 transition-colors
-                  ${selectedIndex === index 
-                    ? "bg-neutral-100 text-neutral-900" 
-                    : "text-neutral-700 hover:bg-neutral-50"
+                  ${
+                    selectedIndex === index
+                      ? "bg-neutral-100 text-neutral-900"
+                      : "text-neutral-700 hover:bg-neutral-50"
                   }`}
                 onClick={() => handleSelectSuggestion(option)}
               >
@@ -133,7 +187,7 @@ const SearchProviders: FC<SearchProvidersProps> = ({
               </li>
             ))
           ) : (
-            <li 
+            <li
               className="px-4 py-3 text-sm text-neutral-600 text-center"
               role="status"
             >
