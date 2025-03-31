@@ -5,6 +5,7 @@ import QueryWrapper from "@/components/wrappers/QueryWrapper";
 import { AppProvider } from "@/context/AppContext";
 import { ErrorBoundary } from "@/components/wrappers/ErrorBoundary";
 import Footer from "@/components/Footer";
+import PageAnimation from "@/components/PageAnimation/PageAnimation";
 // import Header from "@/components/AuthHeader";
 
 const geistSans = Geist({
@@ -20,6 +21,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Handymate",
   description: "Get it done with Handymate",
+  icons: {
+    icon: "https://static.vecteezy.com/system/resources/previews/028/712/640/non_2x/initial-h-letter-logo-design-template-monogram-and-creative-alphabet-letters-icon-illustration-vector.jpg", // Path to favicon in the public folder
+  },
 };
 
 export default function RootLayout({
@@ -34,8 +38,15 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <QueryWrapper>
-            <AppProvider>{children}</AppProvider>
-            <Footer />
+              <AppProvider>
+            <PageAnimation>
+                
+                {children}
+              
+            </PageAnimation>
+              </AppProvider>
+
+              <Footer />
           </QueryWrapper>
         </ErrorBoundary>
       </body>

@@ -52,7 +52,7 @@ const Dropdown: FC<DropdownProps> = ({
         <Button
           variant="outline"
           className={cn(
-            "w-full h-9 px-3 flex items-center justify-between gap-2 text-sm font-medium",
+            `w-full h-9 px-3 flex items-center justify-between text-sm font-medium ${!isDisabled ? "border-[#00A699]":""}`,
             "bg-white hover:bg-neutral-50 focus-visible:ring-primary",
             "disabled:opacity-50 disabled:pointer-events-none disabled:bg-neutral-100",
             isDisabled && "opacity-50 cursor-not-allowed",
@@ -63,6 +63,7 @@ const Dropdown: FC<DropdownProps> = ({
           aria-expanded={isOpen}
           aria-haspopup="listbox"
         >
+          <div className="flex items-center gap-1">
           <span className="truncate">{label}</span>
           <ChevronDown
             className={cn(
@@ -71,6 +72,7 @@ const Dropdown: FC<DropdownProps> = ({
             )}
             aria-hidden="true"
           />
+          </div>
         </Button>
       </DropdownMenuTrigger>
 

@@ -144,7 +144,7 @@ const EmailStep: FC<EmailStepProps> = ({ userType, setStep }) => {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+            className="w-full h-12  text-white disabled:opacity-50 rounded-lg transition-colors"
             disabled={!email || !password || isPending}
             isLoading={isPending}
             loadingText="Creating account..."

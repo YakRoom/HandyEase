@@ -105,7 +105,7 @@ const TermsConditions: FC = () => {
             disabled={!isChecked || isPending}
             isLoading={isPending}
             loadingText="Processing..."
-            className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+            className="w-full h-12 btn-primary text-white  disabled:opacity-50 rounded-lg transition-colors"
           >
             <span className="flex items-center gap-2">
               Continue
