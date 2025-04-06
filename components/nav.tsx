@@ -1,8 +1,9 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import useBodyScrollLock from "@/hooks/useBodyScrollLock";
+
 
 interface MenuItem {
   label: string;
@@ -42,21 +43,22 @@ const Nav: React.FC<NavProps> = ({ isOpen, toggleMenu, menuItems, CloseIcon }) =
 
   const handleMenuClick = (item: MenuItem) => {
     if (item.path) {
+      toggleMenu()
       router.push(item.path);
     } else if (item.action) {
       item.action();
     }
   };
- 
+  useBodyScrollLock(isOpen)
 
   return (
     <div
-      className={` ${mobileClass}fixed top-0 left-0 h-full z-10 text-gray-800 overflow-hidden flex items-center justify-center font-bold text-xl transition-transform duration-300 ease-in-out ${
+      className={` ${mobileClass}fixed top-0 left-0 h-full z-10 text-gray-800 overflow-hidden flex items-center justify-center font-bold text-xl transition-transform duration-700 ease-in-out ${
         isOpen ? "translate-y-0" : "-translate-y-full"
       } lg:relative lg:translate-y-0 lg:flex lg:justify-between lg:items-center`}
     >
       {/* Close Icon on Small Screens */}
-      {isOpen &&hydrated && isMobileScreen  && (
+      {isOpen && hydrated && isMobileScreen  && (
         <div className="absolute right-5 top-5">
           <Image
             src={CloseIcon}
@@ -75,7 +77,7 @@ const Nav: React.FC<NavProps> = ({ isOpen, toggleMenu, menuItems, CloseIcon }) =
           <a
             key={index}
             onClick={() => handleMenuClick(item)}
-            className="hover:text-yellow-500 transition cursor-pointer"
+            className="transition cursor-pointer"
           >
             {item.label}
           </a>

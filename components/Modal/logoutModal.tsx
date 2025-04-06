@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import useBodyScrollLock from "@/hooks/useBodyScrollLock";
+
 
 interface ModalProps {
   isModal: boolean;
@@ -29,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({
     setShowModal(false);
     setIsOpen?.(false);
   };
-
+  useBodyScrollLock(isModal);
   const handleCancel = () => {
     onCancel ? onCancel() : setShowModal(false);
   };
