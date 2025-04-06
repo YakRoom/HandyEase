@@ -39,7 +39,6 @@ export default function LoginPage() {
       }
     },
   } as any);
- console.log("err ",error);
  
   useEffect(() => {
     if (data) {

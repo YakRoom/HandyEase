@@ -1,9 +1,8 @@
-// components/Layout.js
 "use client"
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-// import { useRouter } from "next/router";
+
 
 const PageAnimation = ({ children }) => {
   const pathname = usePathname(); // ✅ Corrected to usePathname

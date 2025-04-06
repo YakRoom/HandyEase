@@ -17,7 +17,6 @@ import HandymenIcon from "@/public/images/handymen-icon";
 import CleanerIcon from "@/public/images/cleaner-icon";
 import thumbnail from "@/public/images/thumbnail.png";
 import { Search, Loader2 } from "lucide-react";
-import Loader from "../ui/onAppload";
 
 interface ServiceType {
   name: string;
@@ -51,7 +50,6 @@ const Home: FC = () => {
   const { data: serviceData,isLoading } = useProvidersControllerGetServiceTypes();
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
-console.log("servicedata", serviceData);
 
   useEffect(() => {
     if (state?.searchedLocation?.placeId) {
@@ -95,7 +93,6 @@ console.log("servicedata", serviceData);
 
   return (
     <div className="space-y-8">
-      {/* {isLoading &&  <Loader/>} */}
      
       <GreyPaper className="space-y-6">
         <div className="space-y-4">

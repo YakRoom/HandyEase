@@ -7,7 +7,7 @@ import WhitePaper from "@/components/ui/white-paper";
 import { Star, Clock, Briefcase, Edit } from "lucide-react";
 import Logo from "@/public/images/logo.png";
 import useBodyScrollLock from "@/hooks/useBodyScrollLock";
-import Modal from "@/components/ui/logoutModal";
+import Modal from "@/components/Modal/logoutModal";
 
 interface ProfileProps {
   provider?: {

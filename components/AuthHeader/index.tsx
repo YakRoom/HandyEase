@@ -6,8 +6,8 @@ import Close from "@/public/images/close.svg";
 import Hamburger from "@/public/images/hamBurger.svg";
 import { useAppContext } from "@/context/AppContext";
 import { useState } from "react";
-import Modal from "../ui/logoutModal";
-import Nav from "../ui/nav";
+import Modal from "../Modal/logoutModal";
+import Nav from "../nav";
 
 const signUpRoutes = ["/auth/sign-up"];
 const loginRoute = ["/auth/login"];
@@ -39,7 +39,6 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { state: appState, dispatch } = useAppContext();
-  // const firstName = state.state.user?.firstName;
   const firstName = appState.user?.firstName;
 
   const isLoginRoute = loginRoute.includes(pathname);
@@ -50,23 +49,7 @@ export default function Header() {
   const showRightCtas = emptyRightSectionRoutes.includes(pathname);
   const showExit = isLoginRoute || isSignUpRoute;
 
-  // const handleLogoutClick = () => {
-  //   setShowModal(true);
-  // };
-
-  console.log("isopn", isOpen);
-
-  // const handleConfirmLogout = () => {
-  //   localStorage.removeItem("token");
-  //   dispatch({ type: "LOGOUT" })
-  //   setIsOpen(false);
-  //   setShowModal(false);
-  //   router.push("/");
-  // };
-
-  // const handleCancelLogout = () => {
-  //   setShowModal(false);
-  // };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -74,8 +57,7 @@ export default function Header() {
     setIsOpen(false);
     router.push("/");
   };
-  //  adeeb111@gmail.com
-  // Adeeb111@
+ 
 
  
   return (
@@ -164,73 +146,7 @@ export default function Header() {
           )}
         </nav>
       )}
-      {/* <div
-        className={`${isOpen ? "block":"hidden"} fixed top-0 left-0 h-full z-10 w-full text-gray-800 flex items-center justify-center font-bold text-xl transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-y-0" : "-translate-y-full"
-        } lg:relative lg:translate-y-0 lg:flex lg:justify-between lg:items-center`}
-      >
-        {isOpen && <div className="absolute right-5 top-5">
-          <Image
-            // src={Close}
-            alt="Close"
-            height={12}
-            width={12}
-            className="w-5 h-5"
-            onClick={toggleMenu}
-          />
-        </div>}
-        <nav className="flex flex-col lg:flex-row gap-10 lg:gap-8 px-6 py-6 lg:py-4 lg:px-10 text-2xl">
-          <a
-            onClick={() => router.push("/view-profile")}
-            className="hover:text-yellow-500 transition"
-          >
-            Profile
-          </a>
-          <a
-            onClick={() => router.push("/")}
-            className="hover:text-yellow-500 transition"
-          >
-            Home
-          </a>
-          <a href="#" className="hover:text-yellow-500 transition">
-            Messages
-          </a>
-          <a href="#" className="hover:text-yellow-500 transition">
-            Settings
-          </a>
-          <a
-            onClick={handleLogoutClick}
-            className="hover:text-yellow-500 transition"
-          >
-            Log out
-          </a>
-        </nav>
-      </div> */}
-      {/* {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                  <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-                    <h2 className="text-lg font-semibold mb-4">
-                      Confirm Logout
-                    </h2>
-                    <p className="mb-4">Are you sure you want to log out?</p>
-                    <div className="flex justify-end gap-4">
-                      <button
-                        onClick={handleCancelLogout}
-                        className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-lg"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleConfirmLogout}
-                        className="btn-primary btn-primary text-white px-4 py-2 rounded-lg"
-                      >
-                        Confirm
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )} */}
-      {/* <LogOutModal isModal={showModal} setShowModal={setShowModal} setIsOpen={setIsOpen} /> */}
+     
 
       <Modal
         isModal={showModal}
