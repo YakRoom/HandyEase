@@ -22,6 +22,7 @@ interface SelectorCardProps {
 
 const SelectorCard: FC<SelectorCardProps> = ({
   checked,
+  viewAll,
   name,
   description,
   img,
@@ -50,7 +51,22 @@ const SelectorCard: FC<SelectorCardProps> = ({
         }
       }}
     >
-      <div
+      {/* <div
+        className={`h-6 w-6 rounded-full border-2 transition-colors mb-3 ${
+          checked
+            ? "border-primary bg-primary/10"
+            : "border-neutral-300 bg-white"
+        }`}
+      >
+        {checked && (
+          <Check className="h-4 w-4 text-primary m-0.5" aria-hidden="true" />
+        )}
+      </div> */}
+     
+      <div className="space-y-4 flex-1">
+      { !viewAll && 
+        (  <>
+             <div
         className={`h-6 w-6 rounded-full border-2 transition-colors mb-3 ${
           checked
             ? "border-primary bg-primary/10"
@@ -61,9 +77,8 @@ const SelectorCard: FC<SelectorCardProps> = ({
           <Check className="h-4 w-4 text-primary m-0.5" aria-hidden="true" />
         )}
       </div>
-
-      <div className="space-y-4 flex-1">
-        <div className="space-y-1">
+            
+            <div className="space-y-1">
           <h3
             className={`text-base font-medium transition-colors ${
               checked ? "text-primary" : "text-neutral-600"
@@ -83,6 +98,29 @@ const SelectorCard: FC<SelectorCardProps> = ({
             {img}
           </div>
         </div>
+          
+        </>)
+      }
+        {/* <div className="space-y-1">
+          <h3
+            className={`text-base font-medium transition-colors ${
+              checked ? "text-primary" : "text-neutral-600"
+            }`}
+          >
+            {name}
+          </h3>
+          <p className="text-sm text-neutral-600 line-clamp-2">{description}</p>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div
+            className={`transition-colors ${
+              checked ? "text-primary" : "text-neutral-400"
+            }`}
+          >
+            {img}
+          </div>
+        </div> */}
 
         <div className="pt-2">
           <Dropdown

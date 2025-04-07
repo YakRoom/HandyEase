@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({ email: "", password: "" });
   const { state, dispatch } = useAppContext();
   const router = useRouter();
-  const { mutate: signIn, data, isPending } = useAuthControllerSignIn();
+  const { mutate: signIn, data, isPending ,error,isError } = useAuthControllerSignIn();
 
   useProvidersControllerGetMyProviderDetails({
     query: {
@@ -39,7 +39,7 @@ export default function LoginPage() {
       }
     },
   } as any);
-
+ 
   useEffect(() => {
     if (data) {
       if (!ISSERVER && localStorage)
@@ -132,6 +132,11 @@ export default function LoginPage() {
                 {errors.email}
               </p>
             )}
+            {isError && (
+              <p id="email-error" className="text-error text-sm" role="alert">
+                {error.response.data.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -170,7 +175,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-primary text-white hover:bg-primary-hover disabled:opacity-50 rounded-lg transition-colors"
+            className="w-full h-12 disabled:opacity-50 rounded-lg transition-colors"
             disabled={!email || !password || isPending}
             isLoading={isPending}
             loadingText="Signing in..."

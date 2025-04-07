@@ -57,7 +57,7 @@ const SignUpSelector: FC<SignUpSelectorProps> = ({ setUserType }) => {
                     </p>
                   </div>
                   <ArrowRight
-                    size={24}
+                    size={40}
                     className="text-neutral-400 group-hover:text-primary transition-colors"
                     aria-hidden="true"
                   />
