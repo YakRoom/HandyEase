@@ -47,7 +47,7 @@ const Home: FC = () => {
   const { mutate, data, isPending } = useProvidersControllerSearchProviders();
   const [selectedCategory, setSelectedCategory] = useState<ServiceType["id"]>(SERVICE_TYPES[0].id);
   const [serviceType, setSelectedServiceType] = useState("");
-  const { data: serviceData,isLoading } = useProvidersControllerGetServiceTypes();
+  const { data: serviceData } = useProvidersControllerGetServiceTypes();
   const [viewAll, setViewAll] = useState(false);
   const { state, dispatch } = useAppContext();
 

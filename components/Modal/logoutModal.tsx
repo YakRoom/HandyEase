@@ -33,6 +33,7 @@ const Modal: React.FC<ModalProps> = ({
   };
   useBodyScrollLock(isModal);
   const handleCancel = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onCancel ? onCancel() : setShowModal(false);
   };
 

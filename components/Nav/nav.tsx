@@ -17,7 +17,12 @@ interface NavProps {
   CloseIcon: string;
 }
 
-const Nav: React.FC<NavProps> = ({ isOpen, toggleMenu, menuItems, CloseIcon }) => {
+const Nav: React.FC<NavProps> = ({
+  isOpen,
+  toggleMenu,
+  menuItems,
+  CloseIcon,
+}) => {
   const router = useRouter();
   const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [hydrated, setHydrated] = useState(false); // To prevent SSR mismatch
@@ -47,7 +52,6 @@ const Nav: React.FC<NavProps> = ({ isOpen, toggleMenu, menuItems, CloseIcon }) =
       item.action();
     }
   };
- 
 
   return (
     <div
@@ -56,7 +60,7 @@ const Nav: React.FC<NavProps> = ({ isOpen, toggleMenu, menuItems, CloseIcon }) =
       } lg:relative lg:translate-y-0 lg:flex lg:justify-between lg:items-center`}
     >
       {/* Close Icon on Small Screens */}
-      {isOpen &&hydrated && isMobileScreen  && (
+      {isOpen && hydrated && isMobileScreen && (
         <div className="absolute right-5 top-5">
           <Image
             src={CloseIcon}
